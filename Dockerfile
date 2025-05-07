@@ -6,6 +6,8 @@ ENV PYTHONPATH=/app
 # Set working directory
 WORKDIR /app
 
+RUN pip install redis
+
 # Copy semua file ke dalam container
 COPY . /app/
 
