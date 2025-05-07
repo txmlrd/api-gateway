@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 import requests
 from config import Config
-from extensions import jwt_required, get_jwt_identity, decode_token, redis_client
+from extensions import jwt_required, get_jwt_identity, decode_token, redis_client, get_jwt
 from security.check_device import check_device_token
 auth_bp = Blueprint('api_gateway', __name__)
 
@@ -34,28 +34,19 @@ def login():
 
     return jsonify({"error": "Login failed"}), 401
 
-@auth_bp.route('/profile', methods=['GET'])
-@jwt_required()
-@check_device_token
-def profile():
-    token = request.headers.get('Authorization').split(' ')[1]
-    response = requests.get(f"{Config.USER_SERVICE_URL}/profile", headers={"Authorization": f"Bearer {token}"})
-    if response.status_code == 200:
-        return jsonify(response.json()), 200
-    return jsonify({"error": "Failed to fetch profile"}), 400
-
 @auth_bp.route('/logout', methods=['GET'])
 @jwt_required()
 @check_device_token
 def logout():
     token = request.headers.get('Authorization').split(' ')[1]
+    user_id = get_jwt_identity()
+    jti = get_jwt()["jti"]
     try:
         response = requests.get(f"{Config.USER_SERVICE_URL}/logout", headers={"Authorization": f"Bearer {token}"})
         if response.status_code == 200:
-            # Hapus token dari Redis
-            user_id = response
+            # Blacklist token dan hapus dari Redis
+            redis_client.setex(f"blacklist_{jti}", 3600, 'blacklisted')
             redis_client.delete(f"user_active_token:{user_id}")
-            
             return jsonify({"msg": "Logout successful"}), 200
         return jsonify({"error": "Logout failed"}), 400
     except Exception as e:
