@@ -18,12 +18,22 @@ def profile():
 
 @user_bp.route('/register', methods=['POST'])
 def register():
-    data = request.form
     try:
-        response = requests.post(f"{Config.USER_SERVICE_URL}/register", data=data, timeout=5)
+        # Ambil data dan file dari request asli
+        form_data = request.form
+        files = [('face_reference', file) for file in request.files.getlist('face_reference')]
+
+        # Kirim form dan file ke User Service
+        response = requests.post(
+            f"{Config.USER_SERVICE_URL}/register",
+            data=form_data,
+            files=files
+        )
         return jsonify(response.json()), response.status_code
+
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
+
     
 @user_bp.route('/update', methods=['POST'])
 @jwt_required()

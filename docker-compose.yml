@@ -5,9 +5,18 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
+    networks:
+      - microservice-net
+
   api_gateway:
     build: .
     ports:
       - "5002:5002"
     volumes:
       - .:/app
+    networks:
+      - microservice-net
+
+networks:
+  microservice-net:
+    external: true
