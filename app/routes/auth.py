@@ -14,7 +14,7 @@ def login_face():
 
         # Kirim form dan file ke User Service
         response = requests.post(
-            f"{Config.USER_SERVICE_URL}/login/face",
+            f"{Config.AUTH_SERVICE_URL}/login-face",
             data=form_data,
             files=files
         )
@@ -29,7 +29,7 @@ def login():
     data = request.form 
     try:
         response = requests.post(
-            f"{Config.USER_SERVICE_URL}/login",
+            f"{Config.AUTH_SERVICE_URL}/login",
             data=data,
             timeout=5
         )
@@ -59,8 +59,8 @@ def logout():
     token = request.headers.get('Authorization').split(' ')[1]
     user_id = get_jwt_identity()
     jti = get_jwt()["jti"]
-    try:
-        response = requests.get(f"{Config.USER_SERVICE_URL}/logout", headers={"Authorization": f"Bearer {token}"})
+    try:    
+        response = requests.get(f"{Config.AUTH_SERVICE_URL}/logout", headers={"Authorization": f"Bearer {token}"})
         if response.status_code == 200:
             # Blacklist token dan hapus dari Redis
             redis_client.setex(f"blacklist_{jti}", 3600, 'blacklisted')

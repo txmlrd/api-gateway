@@ -5,6 +5,7 @@ load_dotenv()
 class Config:
     # Microservice URLs
     USER_SERVICE_URL = os.environ.get('USER_SERVICE_URL')
+    AUTH_SERVICE_URL = os.environ.get('AUTH_SERVICE_URL')
 
     # Redis
     REDIS_URL = os.environ.get('REDIS_URL')

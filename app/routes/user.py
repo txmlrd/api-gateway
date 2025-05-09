@@ -32,7 +32,7 @@ def register():
         return jsonify(response.json()), response.status_code
 
     except requests.exceptions.RequestException as e:
-        return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
+        return jsonify({"error": "User Service unavailable", "details": response.json()}), 503
 
     
 @user_bp.route('/update', methods=['POST'])
