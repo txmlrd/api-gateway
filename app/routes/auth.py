@@ -12,16 +12,32 @@ def login_face():
         form_data = request.form
         files = [('face_image', file) for file in request.files.getlist('face_image')]
 
-        # Kirim form dan file ke User Service
+        # Kirim form dan file ke Auth Service
         response = requests.post(
             f"{Config.AUTH_SERVICE_URL}/login-face",
             data=form_data,
-            files=files
+            files=files,
         )
+
+        if response.status_code == 200:
+            result = response.json()
+            access_token = result['access_token']
+
+            try:
+                decoded = decode_token(access_token)
+                jti = decoded['jti']
+                user_id = decoded['sub']  # identity=user.id
+                redis_client.setex(f"user_active_token:{user_id}", 3600, jti)
+            except Exception as e:
+                return jsonify({"error": "Token decoding failed", "details": str(e)}), 500
+
+            return jsonify(access_token=access_token), 200
+
         return jsonify(response.json()), response.status_code
 
     except requests.exceptions.RequestException as e:
-        return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
+        return jsonify({"error": "Auth Service unavailable", "details": str(e)}), 503
+
 
 
 @auth_bp.route('/login', methods=['POST'])
