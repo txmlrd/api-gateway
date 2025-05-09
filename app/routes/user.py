@@ -66,3 +66,8 @@ def reset_password_request():
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
+    
+# @user_bp.route('/reset-password/refresh', methods=['GET'])
+# def reset_password_refresh():
+
+    

@@ -49,8 +49,10 @@ def login():
             return jsonify({"error": "Token decoding failed", "details": str(e)}), 500
 
         return jsonify(access_token=access_token), 200
+    
+    result = response.json()
+    return jsonify(result), response.status_code
 
-    return jsonify({"error": "Login failed"}), 401
 
 @auth_bp.route('/logout', methods=['GET'])
 @jwt_required()
@@ -66,8 +68,9 @@ def logout():
             redis_client.setex(f"blacklist_{jti}", 3600, 'blacklisted')
             redis_client.delete(f"user_active_token:{user_id}")
             return jsonify({"msg": "Logout successful"}), 200
-        return jsonify({"error": "Logout failed"}), 400
+        response = response.json()
+        return jsonify(response), response.status_code
     except Exception as e:
         return jsonify({"error": "Auth service unreachable", "details": str(e)}), 500
-            
+    
 
