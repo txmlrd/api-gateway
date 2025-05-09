@@ -5,6 +5,24 @@ from extensions import jwt_required, get_jwt_identity, decode_token, redis_clien
 from security.check_device import check_device_token
 auth_bp = Blueprint('api_gateway', __name__)
 
+@auth_bp.route('/login-face', methods=['POST'])
+def login_face():
+    try:
+        # Ambil data dan file dari request asli
+        form_data = request.form
+        files = [('face_image', file) for file in request.files.getlist('face_image')]
+
+        # Kirim form dan file ke User Service
+        response = requests.post(
+            f"{Config.USER_SERVICE_URL}/login/face",
+            data=form_data,
+            files=files
+        )
+        return jsonify(response.json()), response.status_code
+
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
+
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
