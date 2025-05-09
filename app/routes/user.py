@@ -46,6 +46,18 @@ def update_profile():
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
+    
+@user_bp.route('/update/email', methods=['POST'])
+@jwt_required()
+@check_device_token
+def update_email():
+    token = request.headers.get('Authorization').split(' ')[1]
+    data = request.form
+    try:
+        response = requests.post(f"{Config.USER_SERVICE_URL}/update/email", headers={"Authorization": f"Bearer {token}"}, data=data, timeout=5)
+        return jsonify(response.json()), response.status_code
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
 
 @user_bp.route('/delete/<int:id>', methods=['DELETE'])
 @jwt_required()
