@@ -8,7 +8,7 @@ services:
     networks:
       - microservice-net
 
-  api_gateway:
+  api-gateway:
     build: .
     ports:
       - "5002:5002"

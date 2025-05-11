@@ -31,7 +31,11 @@ def login_face():
             except Exception as e:
                 return jsonify({"error": "Token decoding failed", "details": str(e)}), 500
 
-            return jsonify(access_token=access_token), 200
+            response = {
+                "access_token": access_token,
+                "verification_result": result  # Menambahkan hasil verifikasi gambar
+            }
+            return jsonify(response), 200
 
         return jsonify(response.json()), response.status_code
 

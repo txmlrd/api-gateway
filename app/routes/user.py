@@ -47,6 +47,18 @@ def update_profile():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
     
+@user_bp.route('/update/face-reference', methods=['POST'])
+@jwt_required()
+@check_device_token
+def update_face_reference():
+    token = request.headers.get('Authorization').split(' ')[1]
+    files = [('images', file) for file in request.files.getlist('images')]
+    try:
+        response = requests.post(f"{Config.USER_SERVICE_URL}/update/face-reference", headers={"Authorization": f"Bearer {token}"}, files=files, timeout=5)
+        return jsonify(response.json()), response.status_code
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
+    
 @user_bp.route('/update/email', methods=['POST'])
 @jwt_required()
 @check_device_token
@@ -58,6 +70,19 @@ def update_email():
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
+
+@user_bp.route('/update/face-model-preference', methods=['POST'])
+@jwt_required()
+@check_device_token
+def update_face_model_preference():
+    token = request.headers.get('Authorization').split(' ')[1]
+    data = request.form
+    try:
+        response = requests.post(f"{Config.USER_SERVICE_URL}/update/face-model-preference", headers={"Authorization": f"Bearer {token}"}, data=data, timeout=5)
+        return jsonify(response.json()), response.status_code
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
+    
 
 @user_bp.route('/delete/<int:id>', methods=['DELETE'])
 @jwt_required()
