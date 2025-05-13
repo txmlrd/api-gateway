@@ -3,12 +3,14 @@ from extensions import jwt_required, get_jwt_identity
 from security.check_device import check_device_token
 import requests
 from config import Config
+from security.check_permission import check_permission
 
 user_bp = Blueprint('user', __name__)
 
 @user_bp.route('/profile', methods=['GET'])
 @jwt_required()
 @check_device_token
+@check_permission('user_profile')
 def profile():
     token = request.headers.get('Authorization').split(' ')[1]
     response = requests.get(f"{Config.USER_SERVICE_URL}/profile", headers={"Authorization": f"Bearer {token}"})
