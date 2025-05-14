@@ -46,11 +46,13 @@ def login_face():
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
-    data = request.form 
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "Invalid input"}), 400 
     try:
         response = requests.post(
             f"{Config.AUTH_SERVICE_URL}/login",
-            data=data,
+            json=data,
             timeout=5
         )
     except Exception as e:

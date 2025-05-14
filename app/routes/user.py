@@ -4,13 +4,15 @@ from security.check_device import check_device_token
 import requests
 from config import Config
 from security.check_permission import check_permission
+from security.check_crucial_token import check_crucial_token
 
 user_bp = Blueprint('user', __name__)
 
 @user_bp.route('/profile', methods=['GET'])
 @jwt_required()
 @check_device_token
-@check_permission('user_profile')
+@check_permission('view_user')
+@check_crucial_token()
 def profile():
     token = request.headers.get('Authorization').split(' ')[1]
     response = requests.get(f"{Config.USER_SERVICE_URL}/profile", headers={"Authorization": f"Bearer {token}"})
@@ -42,9 +44,11 @@ def register():
 @check_device_token
 def update_profile():
     token = request.headers.get('Authorization').split(' ')[1]
-    data = request.form
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "Invalid input"}), 400
     try:
-        response = requests.post(f"{Config.USER_SERVICE_URL}/update", headers={"Authorization": f"Bearer {token}"}, data=data, timeout=5)
+        response = requests.post(f"{Config.USER_SERVICE_URL}/update", headers={"Authorization": f"Bearer {token}"}, json=data, timeout=5)
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
@@ -64,11 +68,14 @@ def update_face_reference():
 @user_bp.route('/update/email', methods=['POST'])
 @jwt_required()
 @check_device_token
+@check_crucial_token()
 def update_email():
     token = request.headers.get('Authorization').split(' ')[1]
-    data = request.form
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "Invalid input"}), 400
     try:
-        response = requests.post(f"{Config.USER_SERVICE_URL}/update/email", headers={"Authorization": f"Bearer {token}"}, data=data, timeout=5)
+        response = requests.post(f"{Config.USER_SERVICE_URL}/update/email/request", headers={"Authorization": f"Bearer {token}"}, json=data)
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
@@ -99,9 +106,9 @@ def delete_profile(id):
     
 @user_bp.route('/reset-password/request', methods=['POST'])
 def reset_password_request():
-    data = request.form
+    data = request.get_json()
     try:
-        response = requests.post(f"{Config.USER_SERVICE_URL}/reset-password/request", data=data, timeout=5)
+        response = requests.post(f"{Config.USER_SERVICE_URL}/reset-password/request", json=data, timeout=5)
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
