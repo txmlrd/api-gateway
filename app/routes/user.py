@@ -5,7 +5,7 @@ import requests
 from config import Config
 from security.check_permission import check_permission
 from security.check_crucial_token import check_crucial_token
-
+from werkzeug.utils import secure_filename
 user_bp = Blueprint('user', __name__)
 
 @user_bp.route('/profile', methods=['GET'])
@@ -113,7 +113,55 @@ def reset_password_request():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
     
-# @user_bp.route('/reset-password/refresh', methods=['GET'])
-# def reset_password_refresh():
+
+
+@user_bp.route('/update/profile-picture', methods=['POST'])
+@jwt_required()
+@check_device_token
+def update_profile_picture():
+    token = request.headers.get('Authorization').split(' ')[1]
+    files = []
+
+    for file in request.files.getlist('profile_picture'):
+        filename = secure_filename(file.filename)
+        if not filename.lower().endswith('.jpg'):
+            return jsonify({"error": "Only .jpg files are allowed"}), 400
+        files.append(('profile_picture', (filename, file.stream, file.mimetype)))
+
+    try:
+        response = requests.post(
+            f"{Config.USER_SERVICE_URL}/update/profile-picture",
+            headers={"Authorization": f"Bearer {token}"},
+            files=files
+        )
+        return jsonify(response.json()), response.status_code
+
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
+
+from flask import Response
+
+@user_bp.route('/profile-picture/<uuid>', methods=['GET'])
+@jwt_required()
+@check_device_token
+def get_profile_picture(uuid):
+    token = request.headers.get('Authorization').split(' ')[1]
+    try:
+        response = requests.get(
+            f"{Config.USER_SERVICE_URL}/profile-picture/{uuid}",
+            headers={"Authorization": f"Bearer {token}"},
+            stream=True
+        )
+        if response.status_code == 200:
+            # Teruskan konten dan content-type-nya ke client
+            return Response(
+                response.iter_content(chunk_size=1024),
+                content_type=response.headers.get('Content-Type')
+            )
+        else:
+            # Kalau bukan 200, coba parsing JSON error dan teruskan
+            return jsonify(response.json()), response.status_code
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
 
     

@@ -95,4 +95,17 @@ def logout():
     except Exception as e:
         return jsonify({"error": "Auth service unreachable", "details": str(e)}), 500
     
-
+@auth_bp.route('/crucial-verify', methods=['POST'])
+@jwt_required()
+@check_device_token
+def crucial_verify():
+    token = request.headers.get('Authorization').split(' ')[1]
+    data = request.form
+    files = [('image', file) for file in request.files.getlist('image')]
+    if not data or not files:
+        return jsonify({"error": "Invalid input"}), 400
+    try:
+        response = requests.post(f"{Config.AUTH_SERVICE_URL}/crucial-verify", headers={"Authorization": f"Bearer {token}"}, data=data, files=files)
+        return jsonify(response.json()), response.status_code
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "Auth Service unavailable", "details": str(e)}), 503
