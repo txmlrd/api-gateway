@@ -48,17 +48,15 @@ def modify_role():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
       
-@admin_bp.route('/delete-user', methods=['POST'])
+@admin_bp.route('/delete-user/<uuid>', methods=['DELETE'])
 @jwt_required()
 @check_device_token
-def delete_user():
-    data = request.get_json()
-    if not data:
-        return jsonify({"error": "Invalid input"}), 400
+def delete_user(uuid):
     try:
-        response = requests.post(f"{Config.USER_SERVICE_URL}/admin/delete-user", json=data, headers={"Authorization": f"{request.headers['Authorization']}"})
-        if response.status_code == 200:
-            return jsonify(response.json()), 200
-        return jsonify(response.json()), 400
+        response = requests.delete(
+            f"{Config.USER_SERVICE_URL}/admin/delete-user/{uuid}",
+            headers={"Authorization": request.headers.get("Authorization")}
+        )
+        return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
