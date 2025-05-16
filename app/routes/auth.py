@@ -7,7 +7,6 @@ auth_bp = Blueprint('api_gateway', __name__)
 
 @auth_bp.route('/refresh', methods=['POST'])
 @jwt_required(refresh=True)
-@check_device_token  # opsional, kalau kamu pakai
 def refresh_token_gateway():
     token = request.headers.get("Authorization")
 
@@ -16,7 +15,20 @@ def refresh_token_gateway():
             f"{Config.AUTH_SERVICE_URL}/refresh",
             headers={"Authorization": token}
         )
-        return jsonify(response.json()), response.status_code
+        if response.status_code == 200:
+            result = response.json()
+            access_token = result['access_token']
+
+
+            try:
+                decoded = decode_token(access_token)
+                jti = decoded['jti']
+                user_id = decoded['sub']  # identity=user.id
+                redis_client.setex(f"user_active_token:{user_id}", 3600, jti)
+            except Exception as e:
+                return jsonify({"error": "Token decoding failed", "details": str(e)}), 500
+
+            return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({
             "error": "Auth Service unavailable",
