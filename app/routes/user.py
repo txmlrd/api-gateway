@@ -38,6 +38,15 @@ def register():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "User Service unavailable", "details": response.json()}), 503
 
+@user_bp.route('/verify-email/<token>', methods=["GET"])
+def proxy_verify_email(token):
+    try:
+        response = requests.get(f"{Config.USER_SERVICE_URL}/verify-email/{token}")
+        return jsonify(response.json()), response.status_code
+    except requests.exceptions.RequestException:
+        return jsonify({"msg": "Failed to connect to Auth Service"}), 500
+
+
     
 @user_bp.route('/update', methods=['POST'])
 @jwt_required()
@@ -80,6 +89,14 @@ def update_email():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
 
+@user_bp.route('/update/email/confirm/<token>', methods=['GET'])
+def confirm_email_update(token):
+    try:
+        response = requests.get(f"{Config.USER_SERVICE_URL}/update/email/confirm/{token}")
+        return jsonify(response.json()), response.status_code
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
+
 @user_bp.route('/update/face-model-preference', methods=['POST'])
 @jwt_required()
 @check_device_token
@@ -112,6 +129,22 @@ def reset_password_request():
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
+
+@user_bp.route('/reset-password/confirm/<token>', methods=['GET','POST'])
+def reset_password_proxy(token):
+    auth_service_url = f"{Config.USER_SERVICE_URL}/reset-password/confirm/{token}"
+
+    try:
+        if request.method == 'GET':
+            resp = requests.get(auth_service_url)
+        else:  # POST
+            resp = requests.post(auth_service_url, data=request.form)
+
+        # Kirim response HTML dari auth service langsung ke user
+        return Response(resp.content, status=resp.status_code, content_type=resp.headers.get('Content-Type'))
+
+    except requests.exceptions.RequestException as e:
+        return "Auth Service is unavailable", 503
     
 
 
