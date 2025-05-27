@@ -6,6 +6,7 @@ class Config:
     # Microservice URLs
     USER_SERVICE_URL = os.environ.get('USER_SERVICE_URL')
     AUTH_SERVICE_URL = os.environ.get('AUTH_SERVICE_URL')
+    ROLE_SERVICE_URL = os.environ.get('ROLE_SERVICE_URL')
     
     # SYUKRA Service URLs
     URL_CLASS_CONTROL = os.environ.get('URL_CLASS_CONTROL')
