@@ -13,7 +13,7 @@ role_permission_bp = Blueprint('role_permission', __name__)
 @role_permission_bp.route('/role/list', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('manage_role')
+@check_permission('manage_role')
 def role_list():
   try:
     response = requests.get(f"{Config.ROLE_SERVICE_URL}/role/list",)
@@ -24,7 +24,7 @@ def role_list():
 @role_permission_bp.route('/role/create', methods=['POST'])
 @jwt_required()
 @check_device_token
-# @check_permission('manage_role')
+@check_permission('manage_role')
 def create_role():
   data = request.get_json()
   if not data:
@@ -38,7 +38,7 @@ def create_role():
 @role_permission_bp.route('/role/delete/<id>', methods=['DELETE'])
 @jwt_required()
 @check_device_token
-# @check_permission('manage_role')
+@check_permission('manage_role')
 def delete_role(id):
   try:
     response = requests.delete(f"{Config.ROLE_SERVICE_URL}/role/delete/{id}",)
@@ -49,7 +49,7 @@ def delete_role(id):
 @role_permission_bp.route('/role/update/<id>', methods=['PUT'])
 @jwt_required()
 @check_device_token
-# @check_permission('manage_role')
+@check_permission('manage_role')
 def update_role(id):
   data = request.get_json()
   if not data:
@@ -63,7 +63,7 @@ def update_role(id):
 @role_permission_bp.route('/role/assign-permission', methods=['POST'])
 @jwt_required()
 @check_device_token
-# @check_permission('manage_role')
+@check_permission('manage_role')
 def assign_permission():
   data = request.get_json()
   if not data:
@@ -79,7 +79,7 @@ def assign_permission():
 @role_permission_bp.route('/permission/list', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('manage_role')
+@check_permission('manage_role')
 def permission_list():
   try:
     response = requests.get(f"{Config.ROLE_SERVICE_URL}/permission/list",)
@@ -90,7 +90,7 @@ def permission_list():
 @role_permission_bp.route('/permission/create', methods=['POST'])
 @jwt_required()
 @check_device_token
-# @check_permission('manage_role')
+@check_permission('manage_role')
 def create_permission():
   data = request.get_json()
   if not data:
@@ -104,7 +104,7 @@ def create_permission():
 @role_permission_bp.route('/permission/delete/<id>', methods=['DELETE'])
 @jwt_required()
 @check_device_token
-# @check_permission('manage_role')
+@check_permission('manage_role')
 def delete_permission(id):
   try:
     response = requests.delete(f"{Config.ROLE_SERVICE_URL}/permission/delete/{id}",)
@@ -115,7 +115,7 @@ def delete_permission(id):
 @role_permission_bp.route('/permission/update/<id>', methods=['PUT'])
 @jwt_required()
 @check_device_token
-# @check_permission('manage_role')
+@check_permission('manage_role')
 def update_permission(id):
   data = request.get_json()
   if not data:

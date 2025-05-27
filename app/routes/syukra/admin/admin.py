@@ -14,7 +14,7 @@ syukra_admin_bp = Blueprint('syukra-admin', __name__)
 @syukra_admin_bp.route('/kelas/admin', methods=['POST'])
 @jwt_required()
 @check_device_token
-# @check_permission('class_control')
+@check_permission('class_control')
 def create_class():
     data = request.get_json()
     if not data:
@@ -29,7 +29,7 @@ def create_class():
 @syukra_admin_bp.route('/member/admin', methods=['POST'])
 @jwt_required()
 @check_device_token
-# @check_permission('class_control')
+@check_permission('class_control')
 def add_member_class():
     data = request.get_json()
     if not data:
@@ -44,7 +44,7 @@ def add_member_class():
 @syukra_admin_bp.route('/kelas/admin/', methods=['DELETE'])
 @jwt_required()
 @check_device_token
-# @check_permission('class_control')
+@check_permission('class_control')
 def delete_class():
     try:
         response = requests.delete(
@@ -58,7 +58,7 @@ def delete_class():
 @syukra_admin_bp.route('/kelas/admin', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('class_control')
+@check_permission('class_control')
 def get_all_classes_paginated():
     try:
         response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas/admin")
@@ -69,7 +69,7 @@ def get_all_classes_paginated():
 @syukra_admin_bp.route('/kelas/admin/', methods=['PUT'])
 @jwt_required()
 @check_device_token
-# @check_permission('class_control')
+@check_permission('class_control')
 def update_class():
     data = request.get_json()
     if not data:

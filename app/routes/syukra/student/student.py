@@ -13,7 +13,7 @@ syukra_student_bp = Blueprint('syukra-student', __name__)
 @syukra_student_bp.route('/answer', methods=['POST'])
 @jwt_required()
 @check_device_token
-# @check_permission('assessment_session')
+@check_permission('assessment_session')
 def post_answer_student():
     data = request.get_json()
     if not data:
@@ -31,7 +31,7 @@ def post_answer_student():
 @syukra_student_bp.route('/submission/submit/', methods=['POST'])
 @jwt_required()
 @check_device_token
-# @check_permission('assessment_session')
+@check_permission('assessment_session')
 def submit_submission():
     try:
         response = requests.post(
@@ -46,7 +46,7 @@ def submit_submission():
 @syukra_student_bp.route('/student/assessment/', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('assessment_detail_student')
+@check_permission('assessment_detail_student')
 def get_assessment_by_id_userid():
     try:
         response = requests.get(
@@ -61,7 +61,7 @@ def get_assessment_by_id_userid():
 @syukra_student_bp.route('/submission', methods=['POST'])
 @jwt_required()
 @check_device_token
-# @check_permission('assessment_detail_student')
+@check_permission('assessment_detail_student')
 def start_submission():
     data = request.get_json()
     if not data:
@@ -79,7 +79,7 @@ def start_submission():
 @syukra_student_bp.route('/answer/submission/', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('assessment_detail_student')
+@check_permission('assessment_detail_student')
 def get_answer_by_submission_id():
     try:
         response = requests.get(
@@ -95,7 +95,7 @@ def get_answer_by_submission_id():
 @syukra_student_bp.route('/student/kelas/assignment/', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('assignment_detail_student')
+@check_permission('assignment_detail_student')
 def get_assignment_by_id():
     try:
         response = requests.get(
@@ -110,7 +110,7 @@ def get_assignment_by_id():
 @syukra_student_bp.route('/item-pembelajaran/<uuid>', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('assignment_detail_student')
+@check_permission('assignment_detail_student')
 def get_assignment_file_by_uuid(uuid):
     try:
         response = requests.get(
@@ -124,7 +124,7 @@ def get_assignment_file_by_uuid(uuid):
 @syukra_student_bp.route('/student-assignment/', methods=['POST'])
 @jwt_required()
 @check_device_token
-# @check_permission('assignment_detail_student')
+@check_permission('assignment_detail_student')
 def upload_file_submission():
     file =request.files.get('file')
     try:
@@ -142,7 +142,7 @@ def upload_file_submission():
 @syukra_student_bp.route('/student-assignment/<uuid>', methods=['DELETE'])
 @jwt_required()
 @check_device_token
-# @check_permission('assignment_detail_student')
+@check_permission('assignment_detail_student')
 def delete_student_assignment(uuid):
     try:
         response = requests.delete(
@@ -156,7 +156,7 @@ def delete_student_assignment(uuid):
 @syukra_student_bp.route('/student/kelas/assignment-submission', methods=['POST'])
 @jwt_required()
 @check_device_token
-# @check_permission('assignment_detail_student')
+@check_permission('assignment_detail_student')
 def create_assignment_submission():
     data = request.get_json()
     if not data:
@@ -174,7 +174,7 @@ def create_assignment_submission():
 @syukra_student_bp.route('/student-assignment/user', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('assignment_detail_student')
+@check_permission('assignment_detail_student')
 def get_student_uploaded_file():
     try:
         response = requests.get(
@@ -190,7 +190,7 @@ def get_student_uploaded_file():
 @syukra_student_bp.route('/student/assessment/class/', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('class_student_tab')
+@check_permission('class_student_tab')
 def get_assessment_by_classid_userid():
     try:
         response = requests.get(
@@ -205,7 +205,7 @@ def get_assessment_by_classid_userid():
 @syukra_student_bp.route('/public/class/members/', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('class_student_tab')
+@check_permission('class_student_tab')
 def get_class_members_student():
     try:
         response = requests.get(
@@ -220,7 +220,7 @@ def get_class_members_student():
 @syukra_student_bp.route('/kelas/weekly-section/class/', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('class_student_tab')
+@check_permission('class_student_tab')
 def get_weekly_section_by_classid():
     try:
         response = requests.get(
@@ -235,7 +235,7 @@ def get_weekly_section_by_classid():
 @syukra_student_bp.route('/item-pembelajaran/<uuid>', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('class_student_tab')
+@check_permission('class_student_tab')
 def get_item_pembelajaran_by_uuid_student(uuid):
     try:
         response = requests.get(

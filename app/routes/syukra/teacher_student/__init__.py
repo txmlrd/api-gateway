@@ -12,7 +12,7 @@ syukra_teacher_student_bp = Blueprint('syukra-teacher-student', __name__)
 @syukra_teacher_student_bp.route('/public/user/class/', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('view_class')
+@check_permission('view_class')
 def get_class():
     try:
         response = requests.get(
@@ -26,7 +26,7 @@ def get_class():
 @syukra_teacher_student_bp.route('/public/assessment/upcoming/', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('view_assessment')
+@check_permission('view_assessment')
 def get_upcoming_assessments():
     try:
         response = requests.get(

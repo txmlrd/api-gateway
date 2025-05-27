@@ -11,8 +11,7 @@ user_bp = Blueprint('user', __name__)
 @user_bp.route('/profile', methods=['GET'])
 @jwt_required()
 @check_device_token
-@check_permission('view_user')
-@check_crucial_token()
+@check_permission('manage_profile')
 def profile():
     token = request.headers.get('Authorization').split(' ')[1]
     response = requests.get(f"{Config.USER_SERVICE_URL}/profile", headers={"Authorization": f"Bearer {token}"})
@@ -51,6 +50,8 @@ def proxy_verify_email(token):
 @user_bp.route('/update', methods=['POST'])
 @jwt_required()
 @check_device_token
+@check_permission('manage_profile')
+@check_crucial_token()
 def update_profile():
     token = request.headers.get('Authorization').split(' ')[1]
     data = request.get_json()
@@ -65,6 +66,7 @@ def update_profile():
 @user_bp.route('/update/face-reference', methods=['POST'])
 @jwt_required()
 @check_device_token
+@check_permission('manage_profile')
 def update_face_reference():
     token = request.headers.get('Authorization').split(' ')[1]
     files = [('images', file) for file in request.files.getlist('images')]
@@ -77,6 +79,7 @@ def update_face_reference():
 @user_bp.route('/update/email', methods=['POST'])
 @jwt_required()
 @check_device_token
+@check_permission('manage_profile')
 @check_crucial_token()
 def update_email():
     token = request.headers.get('Authorization').split(' ')[1]
@@ -100,6 +103,7 @@ def confirm_email_update(token):
 @user_bp.route('/update/face-model-preference', methods=['POST'])
 @jwt_required()
 @check_device_token
+@check_permission('manage_profile')
 def update_face_model_preference():
     token = request.headers.get('Authorization').split(' ')[1]
     data = request.form
@@ -113,6 +117,8 @@ def update_face_model_preference():
 @user_bp.route('/delete/<int:id>', methods=['DELETE'])
 @jwt_required()
 @check_device_token
+@check_permission('manage_profile')
+@check_crucial_token()
 def delete_profile(id):
     token = request.headers.get('Authorization').split(' ')[1]
     try:
@@ -151,6 +157,7 @@ def reset_password_proxy(token):
 @user_bp.route('/update/profile-picture', methods=['POST'])
 @jwt_required()
 @check_device_token
+@check_permission('manage_profile')
 def update_profile_picture():
     token = request.headers.get('Authorization').split(' ')[1]
     files = []

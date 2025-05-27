@@ -13,7 +13,7 @@ syukra_teacher_bp = Blueprint('syukra-teacher', __name__)
 @syukra_teacher_bp.route('/teacher/assessment/', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('modify_assessment')
+@check_permission('modify_assessment')
 def update_assessment():
     try:
         response = requests.get(f"{Config.URL}/teacher/assessment",params=request.args)
@@ -24,7 +24,7 @@ def update_assessment():
 @syukra_teacher_bp.route('/teacher/assessment/', methods=['DELETE'])
 @jwt_required()
 @check_device_token
-# @check_permission('modify_assessment')
+@check_permission('modify_assessment')
 def delete_assessment():
     try:
         response = requests.delete(f"{Config.URL}/teacher/assessment",params=request.args)
@@ -37,7 +37,7 @@ def delete_assessment():
 @syukra_teacher_bp.route('/assessment/question/update', methods=['PUT'])
 @jwt_required()
 @check_device_token
-# @check_permission('modify_question')
+@check_permission('modify_question')
 def update_questions_choices():
     data = request.get_json()
     if not data:
@@ -53,7 +53,7 @@ def update_questions_choices():
 @syukra_teacher_bp.route('/teacher/assessment/', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('assessment_detail_teacher')
+@check_permission('assessment_detail_teacher')
 def get_assessment_detail_by_id():
     try:
         response = requests.get(f"{Config.URL}/teacher/assessment", params=request.args)
@@ -64,7 +64,7 @@ def get_assessment_detail_by_id():
 @syukra_teacher_bp.route('/assement/submission/', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('assessment_detail_teacher')
+@check_permission('assessment_detail_teacher')
 def get_student_submission_by_assesment_id():
     try:
         response = requests.get(f"{Config.URL}/assement/submission", params=request.args)
@@ -75,7 +75,7 @@ def get_student_submission_by_assesment_id():
 @syukra_teacher_bp.route('/assessment/detail/question/', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('assessment_detail_teacher')
+@check_permission('assessment_detail_teacher')
 def get_questions_by_assessment_id():
     try:
         response = requests.get(f"{Config.URL}/assessment/detail/question/", params=request.args)
@@ -86,7 +86,7 @@ def get_questions_by_assessment_id():
 @syukra_teacher_bp.route('/assessment/question/', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('assessment_detail_teacher')
+@check_permission('assessment_detail_teacher')
 def get_questions_by_id():
     try:
         response = requests.get(f"{Config.URL}/assessment/question", params=request.args)
@@ -97,7 +97,7 @@ def get_questions_by_id():
 @syukra_teacher_bp.route('/assessment/question/', methods=['DELETE'])
 @jwt_required()
 @check_device_token
-# @check_permission('assessment_detail_teacher')
+@check_permission('assessment_detail_teacher')
 def delete_questions_by_id():
     try:
         response = requests.delete(f"{Config.URL}/assessment/question", params=request.args)
@@ -109,7 +109,7 @@ def delete_questions_by_id():
 @syukra_teacher_bp.route('/teacher/assessment', methods=['POST'])
 @jwt_required()
 @check_device_token
-# @check_permission('create_assessment')
+@check_permission('create_assessment')
 def create_assessment():
     data = request.get_json()
     if not data:
@@ -124,7 +124,7 @@ def create_assessment():
 @syukra_teacher_bp.route('/assessment/question', methods=['POST'])
 @jwt_required()
 @check_device_token
-# @check_permission('create_assessment')
+@check_permission('create_assessment')
 def create_questions():
     data = request.get_json()
     if not data:
@@ -140,7 +140,7 @@ def create_questions():
 @syukra_teacher_bp.route('/teacher/kelas/assignment/', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('assignment_detail_teacher')
+@check_permission('assignment_detail_teacher')
 def get_assignment_detail_by_id():
     try:
         response = requests.get(f"{Config.URL_CLASS_CONTROL}/teacher/kelas/assignment", params=request.args)
@@ -151,7 +151,7 @@ def get_assignment_detail_by_id():
 @syukra_teacher_bp.route('/kelas/assignment-submission', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('assignment_detail_teacher')
+@check_permission('assignment_detail_teacher')
 def get_submission_by_assignment_id():
     try:
         response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas/assignment-submission", params=request.args)
@@ -162,7 +162,7 @@ def get_submission_by_assignment_id():
 @syukra_teacher_bp.route('/kelas/assignment-submission/student', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('assignment_detail_teacher')
+@check_permission('assignment_detail_teacher')
 def get_submission_by_id():
     try:
         response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas/assignment-submission/student", params=request.args)
@@ -173,7 +173,7 @@ def get_submission_by_id():
 @syukra_teacher_bp.route('/kelas/assignment-submission', methods=['DELETE'])
 @jwt_required()
 @check_device_token
-# @check_permission('assignment_detail_teacher')
+@check_permission('assignment_detail_teacher')
 def delete_submission_by_submission_id():
     try:
         response = requests.delete(f"{Config.URL_CLASS_CONTROL}/kelas/assignment-submission", params=request.args)
@@ -184,7 +184,7 @@ def delete_submission_by_submission_id():
 @syukra_teacher_bp.route('/kelas/assignment-submission', methods=['PUT'])
 @jwt_required()
 @check_device_token
-# @check_permission('assignment_detail_teacher')
+@check_permission('assignment_detail_teacher')
 def update_score():
     try:
         response = requests.put(f"{Config.URL_CLASS_CONTROL}/kelas/assignment-submission", params=request.args)
@@ -195,7 +195,7 @@ def update_score():
 @syukra_teacher_bp.route('/teacher/student-assignment/<uuid>', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('assignment_detail_teacher')
+@check_permission('assignment_detail_teacher')
 def get_submission_by_uuid(uuid):
     try:
         response = requests.get(f"{Config.URL_CONTENT}/teacher/student-assignment/{uuid}")
@@ -207,7 +207,7 @@ def get_submission_by_uuid(uuid):
 @syukra_teacher_bp.route('/public/class/members/', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('class_student_tab')
+@check_permission('class_student_tab_teacher')
 def get_class_members():
     try:
         response = requests.get(f"{Config.URL_CLASS_CONTROL}/public/class/members", params=request.args)
@@ -218,7 +218,7 @@ def get_class_members():
 @syukra_teacher_bp.route('/teacher/assessment/class/', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('class_student_tab')
+@check_permission('class_student_tab_teacher')
 def get_assessment_by_class_id():
     try:
         response = requests.get(f"{Config.URL}/teacher/assessment/class", params=request.args)
@@ -229,7 +229,7 @@ def get_assessment_by_class_id():
 @syukra_teacher_bp.route('/teacher/assessment/', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('class_student_tab')
+@check_permission('class_student_tab_teacher')
 def get_assessment_by_id():
     try:
         response = requests.get(f"{Config.URL}/teacher/assessment", params=request.args)
@@ -241,7 +241,7 @@ def get_assessment_by_id():
 @syukra_teacher_bp.route('/kelas/weekly-section/class/', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('class_detail')
+@check_permission('class_detail')
 def get_class_detail_all_week():
     try:
         response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas/weekly-section/class", params=request.args)
@@ -252,7 +252,7 @@ def get_class_detail_all_week():
 @syukra_teacher_bp.route('/item-pembelajaran/<uuid>', methods=['DELETE'])
 @jwt_required()
 @check_device_token
-# @check_permission('class_detail')
+@check_permission('class_detail')
 def delete_item_pembelajaran_by_uuid(uuid):
     try:
         response = requests.delete(f"{Config.URL_CONTENT}/item-pembelajaran/{uuid}")
@@ -263,7 +263,7 @@ def delete_item_pembelajaran_by_uuid(uuid):
 @syukra_teacher_bp.route('/item-pembelajaran/<uuid>', methods=['GET'])
 @jwt_required()
 @check_device_token
-# @check_permission('class_detail')
+@check_permission('class_detail')
 def get_item_pembelajaran_by_uuid(uuid):
     try:
         response = requests.get(f"{Config.URL_CONTENT}/item-pembelajaran/{uuid}")
@@ -274,7 +274,7 @@ def get_item_pembelajaran_by_uuid(uuid):
 @syukra_teacher_bp.route('/item-pembelajaran/', methods=['POST'])
 @jwt_required()
 @check_device_token
-# @check_permission('class_detail')
+@check_permission('class_detail')
 def upload_file_pembelajaran():
     file = request.files.get('file')
     try:
@@ -286,7 +286,7 @@ def upload_file_pembelajaran():
 @syukra_teacher_bp.route('/teacher/kelas/weekly-section', methods=['POST'])
 @jwt_required()
 @check_device_token
-# @check_permission('class_detail')
+@check_permission('class_detail')
 def create_weekly_section():
     data = request.get_json()
     if not data:
@@ -301,7 +301,7 @@ def create_weekly_section():
 @syukra_teacher_bp.route('/item-pembelajaran/assignment', methods=['POST'])
 @jwt_required()
 @check_device_token
-# @check_permission('class_detail')
+@check_permission('class_detail')
 def upload_file_assignment():
     file = request.files.get('file')
     try:
@@ -313,7 +313,7 @@ def upload_file_assignment():
 @syukra_teacher_bp.route('/teacher/kelas/assignment', methods=['POST'])
 @jwt_required()
 @check_device_token
-# @check_permission('class_detail')
+@check_permission('class_detail')
 def create_assignment():
     data = request.get_json()
     if not data:
@@ -328,7 +328,7 @@ def create_assignment():
 @syukra_teacher_bp.route('/teacher/kelas/weekly-section', methods=['DELETE'])
 @jwt_required()
 @check_device_token
-# @check_permission('class_detail')
+@check_permission('class_detail')
 def delete_weekly_section():
     try:
         response = requests.delete(f"{Config.URL_CLASS_CONTROL}/teacher/kelas/weekly-section", params=request.args)
