@@ -7,6 +7,7 @@ from app.routes.syukra.teacher.teacher import syukra_teacher_bp
 from app.routes.syukra.student.student import syukra_student_bp
 from app.routes.syukra.teacher_student import syukra_teacher_student_bp
 from app.routes.adhi.role import role_permission_bp
+from app.routes.adhi.storage import storage_bp
 from extensions import jwt
 
 def create_app():
@@ -23,6 +24,7 @@ def create_app():
     app.register_blueprint(syukra_teacher_bp)
     app.register_blueprint(syukra_student_bp)
     app.register_blueprint(syukra_teacher_student_bp)
+    app.register_blueprint(storage_bp)
     
     @app.route('/')
     def index():

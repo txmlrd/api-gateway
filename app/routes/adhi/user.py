@@ -6,6 +6,8 @@ from config import Config
 from security.check_permission import check_permission
 from security.check_crucial_token import check_crucial_token
 from werkzeug.utils import secure_filename
+from flask import Response
+
 user_bp = Blueprint('user', __name__)
 
 @user_bp.route('/profile', methods=['GET'])
@@ -176,31 +178,6 @@ def update_profile_picture():
         )
         return jsonify(response.json()), response.status_code
 
-    except requests.exceptions.RequestException as e:
-        return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
-
-from flask import Response
-
-@user_bp.route('/profile-picture/<uuid>', methods=['GET'])
-@jwt_required()
-@check_device_token
-def get_profile_picture(uuid):
-    token = request.headers.get('Authorization').split(' ')[1]
-    try:
-        response = requests.get(
-            f"{Config.USER_SERVICE_URL}/profile-picture/{uuid}",
-            headers={"Authorization": f"Bearer {token}"},
-            stream=True
-        )
-        if response.status_code == 200:
-            # Teruskan konten dan content-type-nya ke client
-            return Response(
-                response.iter_content(chunk_size=1024),
-                content_type=response.headers.get('Content-Type')
-            )
-        else:
-            # Kalau bukan 200, coba parsing JSON error dan teruskan
-            return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
 
