@@ -10,11 +10,9 @@ storage_bp = Blueprint('storage_bp', __name__)
 
 @storage_bp.route('/storage/user_profile_pictures/<filename>', methods=['GET'])
 def proxy_profile_picture(filename):
-    token = request.headers.get('Authorization').split(' ')[1]
     try:
         response = requests.get(
             f"{Config.USER_SERVICE_URL}/user_profile_pictures/{filename}",
-            headers={"Authorization": f"Bearer {token}"},
             stream=True
         )
         if response.status_code == 200:
