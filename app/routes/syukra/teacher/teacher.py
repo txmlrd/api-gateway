@@ -260,24 +260,24 @@ def get_class_detail_by_id():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
 
-@syukra_teacher_bp.route('/item-pembelajaran/', methods=['DELETE'])
+@syukra_teacher_bp.route('/teacher/item-pembelajaran/', methods=['DELETE'])
 @jwt_required()
 @check_device_token
 @check_permission('class_detail')
 def delete_item_pembelajaran_by_uuid():
     try:
-        response = requests.delete(f"{Config.URL}/item-pembelajaran", params=request.args)
+        response = requests.delete(f"{Config.URL_CONTENT}/item-pembelajaran", params=request.args)
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
 
-@syukra_teacher_bp.route('/item-pembelajaran/', methods=['GET'])
+@syukra_teacher_bp.route('/teacher/item-pembelajaran/', methods=['GET'])
 @jwt_required()
 @check_device_token
 @check_permission('class_detail')
 def get_item_pembelajaran_by_uuid():
     try:
-        response = requests.get(f"{Config.URL}/item-pembelajaran", params=request.args)
+        response = requests.get(f"{Config.URL_CONTENT}/item-pembelajaran", params=request.args)
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
