@@ -202,7 +202,7 @@ def get_assessment_by_classid_userid():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
     
-@syukra_student_bp.route('/public/class/members/', methods=['GET'])
+@syukra_student_bp.route('/student/public/class/members/', methods=['GET'])
 @jwt_required()
 @check_device_token
 @check_permission('class_student_tab')
@@ -217,7 +217,7 @@ def get_class_members_student():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
 
-@syukra_student_bp.route('/kelas/weekly-section/class/', methods=['GET'])
+@syukra_student_bp.route('/student/kelas/weekly-section/class/', methods=['GET'])
 @jwt_required()
 @check_device_token
 @check_permission('class_student_tab')
@@ -232,7 +232,7 @@ def get_weekly_section_by_classid():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
     
-@syukra_student_bp.route('/item-pembelajaran/<uuid>', methods=['GET'])
+@syukra_student_bp.route('/student/item-pembelajaran/<uuid>', methods=['GET'])
 @jwt_required()
 @check_device_token
 @check_permission('class_student_tab')
