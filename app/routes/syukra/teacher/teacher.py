@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 from config import Config
 from security.check_device import check_device_token
 from security.check_permission import check_permission
+from flask import Response
 
 syukra_teacher_bp = Blueprint('syukra-teacher', __name__)
 
@@ -104,6 +105,17 @@ def delete_questions_by_id():
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
+
+@syukra_teacher_bp.route('/assessment/submission/', methods=['DELETE'])
+@jwt_required()
+@check_device_token
+@check_permission('assessment_detail_teacher')
+def delete_submission_by_id():
+    try:
+        response = requests.delete(f"{Config.URL}/assement/submission", params=request.args)
+        return jsonify(response.json()), response.status_code
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
       
 ######################### CREATE ASSESSMENT ########################
 @syukra_teacher_bp.route('/teacher/assessment', methods=['POST'])
@@ -199,7 +211,12 @@ def update_score():
 def get_submission_by_uuid(uuid):
     try:
         response = requests.get(f"{Config.URL_CONTENT}/teacher/student-assignment/{uuid}")
-        return jsonify(response.json()), response.status_code
+        return Response(
+            response.iter_content(chunk_size=1024),
+            content_type=response.headers.get('Content-Type'),
+            status=response.status_code,
+            headers=dict(response.headers)
+        )
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
 
@@ -270,15 +287,22 @@ def delete_item_pembelajaran_by_uuid():
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
-
+    
+from flask import Response
 @syukra_teacher_bp.route('/teacher/item-pembelajaran/', methods=['GET'])
 @jwt_required()
 @check_device_token
 @check_permission('class_detail')
 def get_item_pembelajaran_by_uuid():
     try:
-        response = requests.get(f"{Config.URL_CONTENT}/item-pembelajaran", params=request.args)
-        return jsonify(response.json()), response.status_code
+        response = requests.get(f"{Config.URL_CONTENT}/item-pembelajaran", params=request.args, stream=True)
+        
+        return Response(
+            response.iter_content(chunk_size=1024),
+            content_type=response.headers.get('Content-Type'),
+            status=response.status_code,
+            headers=dict(response.headers)
+        )
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
     
