@@ -72,13 +72,13 @@ def get_student_submission_by_assesment_id():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
 
-@syukra_teacher_bp.route('/assessment/detail/question/', methods=['GET'])
+@syukra_teacher_bp.route('/assessment/detail/questions/', methods=['GET'])
 @jwt_required()
 @check_device_token
 @check_permission('assessment_detail_teacher')
 def get_questions_by_assessment_id():
     try:
-        response = requests.get(f"{Config.URL}/assessment/detail/question/", params=request.args)
+        response = requests.get(f"{Config.URL}/assessment/detail/questions/", params=request.args)
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
