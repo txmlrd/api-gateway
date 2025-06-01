@@ -292,23 +292,7 @@ def delete_item_pembelajaran_by_uuid():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
     
-from flask import Response
-@syukra_teacher_bp.route('/teacher/item-pembelajaran/', methods=['GET'])
-@jwt_required()
-@check_device_token
-@check_permission('class_detail')
-def get_item_pembelajaran_by_uuid():
-    try:
-        response = requests.get(f"{Config.URL_CONTENT}/item-pembelajaran", params=request.args, stream=True)
-        
-        return Response(
-            response.iter_content(chunk_size=1024),
-            content_type=response.headers.get('Content-Type'),
-            status=response.status_code,
-            headers=dict(response.headers)
-        )
-    except requests.exceptions.RequestException as e:
-        return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
+
     
 @syukra_teacher_bp.route('/teacher/kelas/weekly-section', methods=['POST'])
 @jwt_required()
@@ -393,7 +377,6 @@ def update_assignment_teacher():
             "details": str(e)
         }), 503
 
-from werkzeug.utils import secure_filename
 
 @syukra_teacher_bp.route('/teacher/kelas/assignment', methods=['POST'])
 @jwt_required()

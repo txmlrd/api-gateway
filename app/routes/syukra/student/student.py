@@ -107,20 +107,7 @@ def get_assignment_by_id():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Assignment Service unavailable", "details": str(e)}), 503
 
-@syukra_student_bp.route('/item-pembelajaran/<uuid>', methods=['GET'])
-@jwt_required()
-@check_device_token
-@check_permission('assignment_detail_student')
-def get_assignment_file_by_uuid(uuid):
-    try:
-        response = requests.get(
-            f"{Config.URL_CONTENT}/item-pembelajaran/{uuid}",
-            headers={"Authorization": request.headers.get("Authorization")}
-        )
-        return jsonify(response.json()), response.status_code
-    except requests.exceptions.RequestException as e:
-        return jsonify({"error": "Item Pembelajaran Service unavailable", "details": str(e)}), 503
-      
+
 @syukra_student_bp.route('/student-assignment/', methods=['POST'])
 @jwt_required()
 @check_device_token
