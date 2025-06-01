@@ -11,24 +11,28 @@ from flask import Response
 syukra_teacher_bp = Blueprint('syukra-teacher', __name__)
 
 ####################### MODIFY ASSESMENT ########################
-@syukra_teacher_bp.route('/teacher/assessment/', methods=['GET'])
+@syukra_teacher_bp.route('/teacher/assessment/update', methods=['PUT'])
 @jwt_required()
 @check_device_token
 @check_permission('modify_assessment')
 def update_assessment():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "Invalid input"}), 400
+    
     try:
-        response = requests.get(f"{Config.URL}/teacher/assessment",params=request.args)
+        response = requests.get(f"{Config.URL}/teacher/assessment/update",json=data)
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
 
-@syukra_teacher_bp.route('/teacher/assessment/', methods=['DELETE'])
+@syukra_teacher_bp.route('/teacher/assessment/delete', methods=['DELETE'])
 @jwt_required()
 @check_device_token
 @check_permission('modify_assessment')
 def delete_assessment():
     try:
-        response = requests.delete(f"{Config.URL}/teacher/assessment",params=request.args)
+        response = requests.delete(f"{Config.URL}/teacher/assessment/delete",params=request.args)
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
@@ -435,6 +439,18 @@ def create_assignment():
 def delete_weekly_section():
     try:
         response = requests.delete(f"{Config.URL_CLASS_CONTROL}/teacher/kelas/weekly-section", params=request.args)
+        return jsonify(response.json()), response.status_code
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
+    
+
+@syukra_teacher_bp.route('/teacher/kelas/assignment', methods=['DELETE'])
+@jwt_required()
+@check_device_token
+@check_permission('class_detail')
+def delete_assignment_teacher():
+    try:
+        response = requests.delete(f"{Config.URL_CLASS_CONTROL}/teacher/kelas/assignment", params=request.args)
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
