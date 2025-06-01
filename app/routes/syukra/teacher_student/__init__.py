@@ -55,3 +55,29 @@ def get_item_pembelajaran_by_uuid():
         )
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
+
+@syukra_teacher_student_bp.route('/public/class/members/', methods=['GET'])
+@jwt_required()
+@check_device_token
+@check_permission('class_teacher_student')
+def get_class_members_student():
+    try:
+        response = requests.get(
+            f"{Config.URL_CLASS_CONTROL}/public/class/members",
+            params=request.args,
+            headers={"Authorization": request.headers.get("Authorization")}
+        )
+        return jsonify(response.json()), response.status_code
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
+
+@syukra_teacher_student_bp.route('/kelas', methods=['GET'])
+@jwt_required()
+@check_device_token
+@check_permission('class_teacher_student')
+def get_class_detail_by_id():
+    try:
+        response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas", params=request.args)
+        return jsonify(response.json()), response.status_code
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503

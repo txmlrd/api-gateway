@@ -225,16 +225,6 @@ def get_submission_by_uuid(uuid):
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
 
 ########################### CLASS STUDENT TAB ########################
-@syukra_teacher_bp.route('/public/class/members/', methods=['GET'])
-@jwt_required()
-@check_device_token
-@check_permission('class_student_tab_teacher')
-def get_class_members():
-    try:
-        response = requests.get(f"{Config.URL_CLASS_CONTROL}/public/class/members", params=request.args)
-        return jsonify(response.json()), response.status_code
-    except requests.exceptions.RequestException as e:
-        return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
 
 @syukra_teacher_bp.route('/teacher/assessment/class/', methods=['GET'])
 @jwt_required()
@@ -270,16 +260,7 @@ def get_class_detail_all_week():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
     
-@syukra_teacher_bp.route('/kelas', methods=['GET'])
-@jwt_required()
-@check_device_token
-@check_permission('class_detail')
-def get_class_detail_by_id():
-    try:
-        response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas", params=request.args)
-        return jsonify(response.json()), response.status_code
-    except requests.exceptions.RequestException as e:
-        return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
+
 
 @syukra_teacher_bp.route('/teacher/item-pembelajaran/', methods=['DELETE'])
 @jwt_required()
