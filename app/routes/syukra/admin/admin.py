@@ -61,7 +61,7 @@ def delete_class():
 @check_permission('class_control')
 def get_all_classes_paginated():
     try:
-        response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas/admin")
+        response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas/admin", params=request.args)
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503

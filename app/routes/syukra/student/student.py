@@ -163,19 +163,27 @@ def delete_student_assignment(uuid):
 @check_device_token
 @check_permission('assignment_detail_student')
 def create_assignment_submission():
-    data = request.get_json()
+    data = request.form
     if not data:
         return jsonify({"error": "Invalid input"}), 400
+    
+    file = request.files.get('file')
+    files = {}
+    if file:
+        filename = secure_filename(file.filename)
+        files['file'] = (filename, file.read(), file.content_type)
     try:
         response = requests.post(
             f"{Config.URL_CLASS_CONTROL}/student/kelas/assignment-submission",
-            json=data,
+            data=data,
+            files=files if file else None,
             headers={"Authorization": request.headers.get("Authorization")}
         )
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Assignment Service unavailable", "details": str(e)}), 503
-      
+
+
 @syukra_student_bp.route('/student-assignment/user', methods=['GET'])
 @jwt_required()
 @check_device_token
