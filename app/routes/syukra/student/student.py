@@ -27,6 +27,24 @@ def post_answer_student():
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Assessment Service unavailable", "details": str(e)}), 503
+    
+@syukra_student_bp.route('/answer/', methods=['PUT'])
+@jwt_required()
+@check_device_token
+@check_permission('assessment_session')
+def update_answer_student():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "Invalid input"}), 400
+    try:
+        response = requests.put(
+            f"{Config.URL}/answer/",
+            json=data,
+            headers={"Authorization": request.headers.get("Authorization")}
+        )
+        return jsonify(response.json()), response.status_code
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "Assessment Service unavailable", "details": str(e)}), 503
 
 @syukra_student_bp.route('/submission/submit/', methods=['POST'])
 @jwt_required()
