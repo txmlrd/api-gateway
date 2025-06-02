@@ -9,9 +9,11 @@ from app.routes.syukra.teacher_student import syukra_teacher_student_bp
 from app.routes.adhi.role import role_permission_bp
 from app.routes.adhi.storage import storage_bp
 from extensions import jwt
+from flask_cors import CORS
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)
     app.config.from_object('config.Config')
     
     jwt.init_app(app)
