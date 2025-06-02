@@ -69,6 +69,7 @@ def update_profile():
 @jwt_required()
 @check_device_token
 @check_permission('manage_profile')
+@check_crucial_token()
 def update_face_reference():
     token = request.headers.get('Authorization').split(' ')[1]
     files = [('images', file) for file in request.files.getlist('images')]

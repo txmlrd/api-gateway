@@ -3,6 +3,7 @@ import requests
 from config import Config
 from extensions import jwt_required, get_jwt_identity, decode_token, redis_client, get_jwt
 from security.check_device import check_device_token
+
 auth_bp = Blueprint('api_gateway', __name__)
 
 @auth_bp.route('/refresh', methods=['POST'])
