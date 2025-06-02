@@ -21,7 +21,7 @@ def update_assessment():
         return jsonify({"error": "Invalid input"}), 400
     
     try:
-        response = requests.get(f"{Config.URL}/teacher/assessment/update",json=data)
+        response = requests.put(f"{Config.URL}/teacher/assessment/update",json=data)
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
