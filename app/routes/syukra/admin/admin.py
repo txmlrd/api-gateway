@@ -21,7 +21,7 @@ def create_class():
         return jsonify({"error": "Invalid input"}), 400
     
     try:
-        response = requests.post(f"{Config.URL_CLASS_CONTROL}/kelas/admin", json=data)
+        response = requests.post(f"{Config.URL_CLASS_CONTROL}/kelas/admin", json=data,headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
@@ -36,7 +36,7 @@ def add_member_class():
         return jsonify({"error": "Invalid input"}), 400
     
     try:
-        response = requests.post(f"{Config.URL_CLASS_CONTROL}/member/admin", json=data)
+        response = requests.post(f"{Config.URL_CLASS_CONTROL}/member/admin", json=data,headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
@@ -49,7 +49,8 @@ def delete_class():
     try:
         response = requests.delete(
             f"{Config.URL_CLASS_CONTROL}/kelas/admin",
-            params=request.args
+            params=request.args,
+            headers={"Authorization": request.headers.get("Authorization")}
         )
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
@@ -61,7 +62,7 @@ def delete_class():
 @check_permission('class_control')
 def get_all_classes_paginated():
     try:
-        response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas/admin", params=request.args)
+        response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas/admin", params=request.args,headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
@@ -76,7 +77,7 @@ def update_class():
         return jsonify({"error": "Invalid input"}), 400
     
     try:
-        response = requests.put(f"{Config.URL_CLASS_CONTROL}/kelas/admin",params=request.args, json=data)
+        response = requests.put(f"{Config.URL_CLASS_CONTROL}/kelas/admin",params=request.args, json=data,headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
@@ -89,7 +90,8 @@ def delete_member_class():
     try:
         response = requests.delete(
             f"{Config.URL_CLASS_CONTROL}/member/admin",
-            params=request.args
+            params=request.args,
+            headers={"Authorization": request.headers.get("Authorization")}
         )
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:

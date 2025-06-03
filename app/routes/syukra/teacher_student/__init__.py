@@ -18,7 +18,8 @@ def get_class():
     try:
         response = requests.get(
             f"{Config.URL_CLASS_CONTROL}/public/user/class",
-            params=request.args
+            params=request.args,
+            headers={"Authorization": request.headers.get("Authorization")}
         )
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
@@ -32,7 +33,8 @@ def get_upcoming_assessments():
     try:
         response = requests.get(
             f"{Config.URL_CLASS_CONTROL}/public/assessment/upcoming",
-            params=request.args
+            params=request.args,
+            headers={"Authorization": request.headers.get("Authorization")}
         )
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
@@ -45,7 +47,7 @@ def get_upcoming_assessments():
 @check_permission('get_item_pembelajaran')
 def get_item_pembelajaran_by_uuid():
     try:
-        response = requests.get(f"{Config.URL_CONTENT}/item-pembelajaran", params=request.args, stream=True)
+        response = requests.get(f"{Config.URL_CONTENT}/item-pembelajaran", params=request.args, stream=True, headers={"Authorization": request.headers.get("Authorization")})
         
         return Response(
             response.iter_content(chunk_size=1024),
@@ -77,7 +79,7 @@ def get_class_members_student():
 @check_permission('class_teacher_student')
 def get_class_detail_by_id():
     try:
-        response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas", params=request.args)
+        response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503

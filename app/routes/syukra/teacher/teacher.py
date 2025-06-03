@@ -21,7 +21,7 @@ def update_assessment():
         return jsonify({"error": "Invalid input"}), 400
     
     try:
-        response = requests.put(f"{Config.URL}/teacher/assessment/update",json=data)
+        response = requests.put(f"{Config.URL}/teacher/assessment/update",json=data, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
@@ -32,7 +32,7 @@ def update_assessment():
 @check_permission('modify_assessment')
 def delete_assessment():
     try:
-        response = requests.delete(f"{Config.URL}/teacher/assessment/delete",params=request.args)
+        response = requests.delete(f"{Config.URL}/teacher/assessment/delete",params=request.args, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
@@ -49,7 +49,7 @@ def update_questions_choices():
         return jsonify({"error": "Invalid input"}), 400
       
     try:
-        response = requests.put(f"{Config.URL}/assessment/question/update", json=data)
+        response = requests.put(f"{Config.URL}/assessment/question/update", json=data, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
@@ -61,7 +61,7 @@ def update_questions_choices():
 @check_permission('assessment_detail_teacher')
 def get_assessment_detail_by_id():
     try:
-        response = requests.get(f"{Config.URL}/teacher/assessment", params=request.args)
+        response = requests.get(f"{Config.URL}/teacher/assessment", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
@@ -72,7 +72,7 @@ def get_assessment_detail_by_id():
 @check_permission('assessment_detail_teacher')
 def get_student_submission_by_assesment_id():
     try:
-        response = requests.get(f"{Config.URL}/assement/submission", params=request.args)
+        response = requests.get(f"{Config.URL}/assement/submission", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
@@ -83,7 +83,7 @@ def get_student_submission_by_assesment_id():
 @check_permission('assessment_detail_teacher')
 def get_questions_by_assessment_id():
     try:
-        response = requests.get(f"{Config.URL}/assessment/detail/questions/", params=request.args)
+        response = requests.get(f"{Config.URL}/assessment/detail/questions/", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
@@ -94,7 +94,7 @@ def get_questions_by_assessment_id():
 @check_permission('assessment_detail_teacher')
 def get_questions_by_id():
     try:
-        response = requests.get(f"{Config.URL}/assessment/question", params=request.args)
+        response = requests.get(f"{Config.URL}/assessment/question", params=request.args,   headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
@@ -105,7 +105,7 @@ def get_questions_by_id():
 @check_permission('assessment_detail_teacher')
 def delete_questions_by_id():
     try:
-        response = requests.delete(f"{Config.URL}/assessment/question", params=request.args)
+        response = requests.delete(f"{Config.URL}/assessment/question", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
@@ -116,7 +116,7 @@ def delete_questions_by_id():
 @check_permission('assessment_detail_teacher')
 def delete_submission_by_id():
     try:
-        response = requests.delete(f"{Config.URL}/assement/submission", params=request.args)
+        response = requests.delete(f"{Config.URL}/assement/submission", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
@@ -132,7 +132,7 @@ def create_assessment():
         return jsonify({"error": "Invalid input"}), 400
     
     try:
-        response = requests.post(f"{Config.URL}/teacher/assessment", json=data)
+        response = requests.post(f"{Config.URL}/teacher/assessment", json=data, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
@@ -147,7 +147,7 @@ def create_questions():
         return jsonify({"error": "Invalid input"}), 400
     
     try:
-        response = requests.post(f"{Config.URL}/assessment/question", json=data)
+        response = requests.post(f"{Config.URL}/assessment/question", json=data, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
@@ -159,7 +159,7 @@ def create_questions():
 @check_permission('assignment_detail_teacher')
 def get_assignment_detail_by_id():
     try:
-        response = requests.get(f"{Config.URL_CLASS_CONTROL}/teacher/kelas/assignment", params=request.args)
+        response = requests.get(f"{Config.URL_CLASS_CONTROL}/teacher/kelas/assignment", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
@@ -170,7 +170,7 @@ def get_assignment_detail_by_id():
 @check_permission('assignment_detail_teacher')
 def get_submission_by_assignment_id():
     try:
-        response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas/assignment-submission", params=request.args)
+        response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas/assignment-submission", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
@@ -181,7 +181,7 @@ def get_submission_by_assignment_id():
 @check_permission('assignment_detail_teacher')
 def get_submission_by_id():
     try:
-        response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas/assignment-submission/student", params=request.args)
+        response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas/assignment-submission/student", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
@@ -192,7 +192,7 @@ def get_submission_by_id():
 @check_permission('assignment_detail_teacher')
 def delete_submission_by_submission_id():
     try:
-        response = requests.delete(f"{Config.URL_CLASS_CONTROL}/kelas/assignment-submission", params=request.args)
+        response = requests.delete(f"{Config.URL_CLASS_CONTROL}/kelas/assignment-submission", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
@@ -203,7 +203,7 @@ def delete_submission_by_submission_id():
 @check_permission('assignment_detail_teacher')
 def update_score():
     try:
-        response = requests.put(f"{Config.URL_CLASS_CONTROL}/kelas/assignment-submission", params=request.args)
+        response = requests.put(f"{Config.URL_CLASS_CONTROL}/kelas/assignment-submission", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
@@ -214,7 +214,7 @@ def update_score():
 @check_permission('assignment_detail_teacher')
 def get_submission_by_uuid(uuid):
     try:
-        response = requests.get(f"{Config.URL_CONTENT}/teacher/student-assignment/{uuid}")
+        response = requests.get(f"{Config.URL_CONTENT}/teacher/student-assignment/{uuid}", headers={"Authorization": request.headers.get("Authorization")})
         return Response(
             response.iter_content(chunk_size=1024),
             content_type=response.headers.get('Content-Type'),
@@ -232,7 +232,7 @@ def get_submission_by_uuid(uuid):
 @check_permission('class_student_tab_teacher')
 def get_assessment_by_class_id():
     try:
-        response = requests.get(f"{Config.URL}/teacher/assessment/class", params=request.args)
+        response = requests.get(f"{Config.URL}/teacher/assessment/class", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
@@ -243,7 +243,7 @@ def get_assessment_by_class_id():
 @check_permission('class_student_tab_teacher')
 def get_assessment_by_id():
     try:
-        response = requests.get(f"{Config.URL}/teacher/assessment", params=request.args)
+        response = requests.get(f"{Config.URL}/teacher/assessment", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
@@ -255,7 +255,7 @@ def get_assessment_by_id():
 @check_permission('class_detail')
 def get_class_detail_all_week():
     try:
-        response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas/weekly-section/class", params=request.args)
+        response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas/weekly-section/class", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
@@ -268,7 +268,7 @@ def get_class_detail_all_week():
 @check_permission('class_detail')
 def delete_item_pembelajaran_by_uuid():
     try:
-        response = requests.delete(f"{Config.URL_CONTENT}/item-pembelajaran", params=request.args)
+        response = requests.delete(f"{Config.URL_CONTENT}/item-pembelajaran", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
@@ -297,7 +297,8 @@ def create_weekly_section():
         response = requests.post(
             f"{Config.URL_CLASS_CONTROL}/teacher/kelas/weekly-section",
             data=data,
-            files=files
+            files=files,
+            headers={"Authorization": request.headers.get("Authorization")}
         )
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
@@ -324,6 +325,7 @@ def update_weekly_section_teacher():
             f"{Config.URL_CLASS_CONTROL}/teacher/kelas/weekly-section",
             data=data,
             files=files,
+            headers={"Authorization": request.headers.get("Authorization")}
         )
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
@@ -350,6 +352,7 @@ def update_assignment_teacher():
             f"{Config.URL_CLASS_CONTROL}/teacher/kelas/assignment",
             data=data,
             files=files,
+            headers={"Authorization": request.headers.get("Authorization")}
         )
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
@@ -402,7 +405,7 @@ def create_assignment():
 @check_permission('class_detail')
 def delete_weekly_section():
     try:
-        response = requests.delete(f"{Config.URL_CLASS_CONTROL}/teacher/kelas/weekly-section", params=request.args)
+        response = requests.delete(f"{Config.URL_CLASS_CONTROL}/teacher/kelas/weekly-section", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
@@ -414,7 +417,7 @@ def delete_weekly_section():
 @check_permission('class_detail')
 def delete_assignment_teacher():
     try:
-        response = requests.delete(f"{Config.URL_CLASS_CONTROL}/teacher/kelas/assignment", params=request.args)
+        response = requests.delete(f"{Config.URL_CLASS_CONTROL}/teacher/kelas/assignment", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
