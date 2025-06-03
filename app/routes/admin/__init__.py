@@ -67,3 +67,53 @@ def delete_user(uuid):
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
+    
+@admin_bp.route('/inject-crucial-token', methods=['POST'])
+@jwt_required()
+@check_device_token
+@check_permission('manage_user')
+def inject_crucial_token():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "Invalid input"}), 400
+    try:
+        response = requests.post(f"{Config.AUTH_SERVICE_URL}/inject-crucial-token", json=data, headers={"Authorization": f"{request.headers['Authorization']}"})
+        if response.status_code == 200:
+            return jsonify(response.json()), 200
+        return jsonify(response.json()), 400
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
+    
+@admin_bp.route('/delete-crucial-token', methods=['DELETE'])
+@jwt_required()
+@check_device_token
+@check_permission('manage_user')
+def delete_crucial_token():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "Invalid input"}), 400
+    try:
+        response = requests.delete(
+            f"{Config.AUTH_SERVICE_URL}/delete-crucial-token",
+            json=data,
+            headers={"Authorization": request.headers.get("Authorization")}
+        )
+        return jsonify(response.json()), response.status_code
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
+    
+@admin_bp.route('/verify-email-user', methods=['POST'])
+@jwt_required()
+@check_device_token
+@check_permission('manage_user')
+def verify_email_user():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "Invalid input"}), 400
+    try:
+        response = requests.post(f"{Config.USER_SERVICE_URL}/admin/verify-email-user", json=data, headers={"Authorization": f"{request.headers['Authorization']}"})
+        if response.status_code == 200:
+            return jsonify(response.json()), 200
+        return jsonify(response.json()), 400
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "User Service unavailable", "details": str(e)}), 503

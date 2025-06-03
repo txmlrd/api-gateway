@@ -80,3 +80,17 @@ def update_class():
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
+
+@syukra_admin_bp.route('/member/admin', methods=['DELETE'])
+@jwt_required()
+@check_device_token
+@check_permission('class_control')
+def delete_member_class():
+    try:
+        response = requests.delete(
+            f"{Config.URL_CLASS_CONTROL}/member/admin",
+            params=request.args
+        )
+        return jsonify(response.json()), response.status_code
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
