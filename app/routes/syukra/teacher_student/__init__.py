@@ -5,7 +5,7 @@ import requests
 from werkzeug.utils import secure_filename
 from config import Config
 from security.check_device import check_device_token
-from security.check_permission import check_permission
+from security.role_required import role_required
 from flask import Response
 
 syukra_teacher_student_bp = Blueprint('syukra-teacher-student', __name__)
@@ -13,7 +13,7 @@ syukra_teacher_student_bp = Blueprint('syukra-teacher-student', __name__)
 @syukra_teacher_student_bp.route('/public/user/class/', methods=['GET'])
 @jwt_required()
 @check_device_token
-@check_permission('view_class')
+@role_required(['admin', 'teacher', 'student'])
 def get_class():
     try:
         response = requests.get(
@@ -28,7 +28,7 @@ def get_class():
 @syukra_teacher_student_bp.route('/public/assessment/upcoming/', methods=['GET'])
 @jwt_required()
 @check_device_token
-@check_permission('view_assessment')
+@role_required(['admin', 'teacher', 'student'])
 def get_upcoming_assessments():
     try:
         response = requests.get(
@@ -44,7 +44,7 @@ def get_upcoming_assessments():
 @syukra_teacher_student_bp.route('/item-pembelajaran/', methods=['GET'])
 @jwt_required()
 @check_device_token
-@check_permission('get_item_pembelajaran')
+@role_required(['admin', 'teacher', 'student'])
 def get_item_pembelajaran_by_uuid():
     try:
         response = requests.get(f"{Config.URL_CONTENT}/item-pembelajaran", params=request.args, stream=True, headers={"Authorization": request.headers.get("Authorization")})
@@ -61,7 +61,7 @@ def get_item_pembelajaran_by_uuid():
 @syukra_teacher_student_bp.route('/public/class/members/', methods=['GET'])
 @jwt_required()
 @check_device_token
-@check_permission('class_teacher_student')
+@role_required(['admin', 'teacher', 'student'])
 def get_class_members_student():
     try:
         response = requests.get(
@@ -76,7 +76,7 @@ def get_class_members_student():
 @syukra_teacher_student_bp.route('/kelas', methods=['GET'])
 @jwt_required()
 @check_device_token
-@check_permission('class_teacher_student')
+@role_required(['admin', 'teacher', 'student'])
 def get_class_detail_by_id():
     try:
         response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas", params=request.args, headers={"Authorization": request.headers.get("Authorization")})

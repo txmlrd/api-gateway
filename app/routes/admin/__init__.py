@@ -5,15 +5,15 @@ import requests
 from werkzeug.utils import secure_filename
 from config import Config
 from security.check_device import check_device_token
-from security.check_permission import check_permission
 from security.check_crucial_token import check_crucial_token
+from security.role_required import role_required
 
 admin_bp = Blueprint('admin', __name__)
 
 @admin_bp.route('/get-user', methods=['GET'])
 @jwt_required()
 @check_device_token
-@check_permission('manage_user')
+@role_required(['admin'])
 def get_all_user():
     try:
         response = requests.get(f"{Config.USER_SERVICE_URL}/admin/get-user",params=request.args, headers={"Authorization": f"{request.headers['Authorization']}"})
@@ -26,7 +26,7 @@ def get_all_user():
 @admin_bp.route('/search-user', methods=['GET'])
 @jwt_required()
 @check_device_token
-@check_permission('manage_user')
+@role_required(['admin'])
 def search_user():
     try:
         response = requests.get(f"{Config.USER_SERVICE_URL}/admin/search-user",params=request.args, headers={"Authorization": f"{request.headers['Authorization']}"})
@@ -39,7 +39,7 @@ def search_user():
 @admin_bp.route('/modify-role', methods=['POST'])
 @jwt_required()
 @check_device_token
-@check_permission('manage_user')
+@role_required(['admin'])
 @check_crucial_token()
 def modify_role():
     data = request.get_json()
@@ -56,7 +56,7 @@ def modify_role():
 @admin_bp.route('/delete-user/<uuid>', methods=['DELETE'])
 @jwt_required()
 @check_device_token
-@check_permission('manage_user')
+@role_required(['admin'])
 @check_crucial_token()
 def delete_user(uuid):
     try:
@@ -71,7 +71,7 @@ def delete_user(uuid):
 @admin_bp.route('/inject-crucial-token', methods=['POST'])
 @jwt_required()
 @check_device_token
-@check_permission('manage_user')
+@role_required(['admin'])
 def inject_crucial_token():
     data = request.get_json()
     if not data:
@@ -87,7 +87,7 @@ def inject_crucial_token():
 @admin_bp.route('/delete-crucial-token', methods=['DELETE'])
 @jwt_required()
 @check_device_token
-@check_permission('manage_user')
+@role_required(['admin'])
 def delete_crucial_token():
     data = request.get_json()
     if not data:
@@ -105,7 +105,7 @@ def delete_crucial_token():
 @admin_bp.route('/verify-email-user', methods=['POST'])
 @jwt_required()
 @check_device_token
-@check_permission('manage_user')
+@role_required(['admin'])
 def verify_email_user():
     data = request.get_json()
     if not data:
