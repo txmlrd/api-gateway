@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, url_for, render_template
+from flask import Blueprint, Response, request, jsonify, url_for, render_template
 from extensions import  jwt_required
 from datetime import datetime, timedelta
 import requests
@@ -183,21 +183,23 @@ def create_assignment_submission():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Assignment Service unavailable", "details": str(e)}), 503
 
-
 @syukra_student_bp.route('/student-assignment/user', methods=['GET'])
 @jwt_required()
 @check_device_token
 @check_permission('assignment_detail_student')
 def get_student_uploaded_file():
     try:
-        response = requests.get(
-            f"{Config.URL_CONTENT}/student-assignment/user",
-            params=request.args,
-            headers={"Authorization": request.headers.get("Authorization")}
+        response = requests.get(f"{Config.URL_CONTENT}/student-assignment/user", params=request.args, stream=True, headers={"Authorization": request.headers.get("Authorization")})
+        
+        return Response(
+            response.iter_content(chunk_size=1024),
+            content_type=response.headers.get('Content-Type'),
+            status=response.status_code,
+            headers=dict(response.headers)
         )
-        return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
-        return jsonify({"error": "Assignment Service unavailable", "details": str(e)}), 503
+        return jsonify({"error": "Class Service unavailable", "details": str(e)}), 503
+
         
 ############################## CLASS STUDENT TAB ########################
 @syukra_student_bp.route('/student/assessment/class/', methods=['GET'])
