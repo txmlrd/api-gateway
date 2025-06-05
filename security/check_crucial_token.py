@@ -11,7 +11,10 @@ def check_crucial_token():
             user_id = get_jwt_identity()
             key = f"crucial_token:{user_id}"
             if not redis_client.get(key):
-                return jsonify({"error": "Crucial verification required"}), 403
+                  return jsonify({
+                    "error": "CRUCIAL_FEATURE_AUTH_REQUIRED",
+                    "message": "Crucial verification required",
+                }), 403
             return f(*args, **kwargs)
         return wrapper
     return decorator
