@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 from config import Config
 from security.check_device import check_device_token
 from security.role_required import role_required
+from security.check_permission import check_permission
 from flask import Response
 
 syukra_teacher_student_bp = Blueprint('syukra-teacher-student', __name__)
@@ -14,6 +15,7 @@ syukra_teacher_student_bp = Blueprint('syukra-teacher-student', __name__)
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher', 'student'])
+# @check_permission('view_class')
 def get_class():
     try:
         response = requests.get(
@@ -29,6 +31,7 @@ def get_class():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher', 'student'])
+@check_permission('view_assessment')
 def get_upcoming_assessments():
     try:
         response = requests.get(
@@ -45,6 +48,7 @@ def get_upcoming_assessments():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher', 'student'])
+@check_permission('get_item_pembelajaran')
 def get_item_pembelajaran_by_uuid():
     try:
         response = requests.get(f"{Config.URL_CONTENT}/item-pembelajaran", params=request.args, stream=True, headers={"Authorization": request.headers.get("Authorization")})
@@ -62,6 +66,7 @@ def get_item_pembelajaran_by_uuid():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher', 'student'])
+@check_permission('class_teacher_student')
 def get_class_members_student():
     try:
         response = requests.get(
@@ -77,6 +82,7 @@ def get_class_members_student():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher', 'student'])
+@check_permission('class_teacher_student')
 def get_class_detail_by_id():
     try:
         response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas", params=request.args, headers={"Authorization": request.headers.get("Authorization")})

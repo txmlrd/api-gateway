@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 from config import Config
 from security.check_device import check_device_token
 from security.role_required import role_required
+from security.check_permission import check_permission
 from flask import Response
 
 syukra_teacher_bp = Blueprint('syukra-teacher', __name__)
@@ -15,6 +16,7 @@ syukra_teacher_bp = Blueprint('syukra-teacher', __name__)
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('modify_assessment')
 def update_assessment():
     data = request.get_json()
     if not data:
@@ -30,6 +32,7 @@ def update_assessment():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('modify_assessment')
 def delete_assessment():
     try:
         response = requests.delete(f"{Config.URL}/teacher/assessment/delete",params=request.args, headers={"Authorization": request.headers.get("Authorization")})
@@ -43,6 +46,7 @@ def delete_assessment():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('modify_question')
 def update_questions_choices():
     data = request.get_json()
     if not data:
@@ -59,6 +63,7 @@ def update_questions_choices():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('assessment_detail_teacher')
 def get_assessment_detail_by_id():
     try:
         response = requests.get(f"{Config.URL}/teacher/assessment", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
@@ -70,6 +75,7 @@ def get_assessment_detail_by_id():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('assessment_detail_teacher')
 def get_student_submission_by_assesment_id():
     try:
         response = requests.get(f"{Config.URL}/assement/submission", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
@@ -81,6 +87,7 @@ def get_student_submission_by_assesment_id():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('assessment_detail_teacher')
 def get_questions_by_assessment_id():
     try:
         response = requests.get(f"{Config.URL}/assessment/detail/questions/", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
@@ -92,6 +99,7 @@ def get_questions_by_assessment_id():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('assessment_detail_teacher')
 def get_questions_by_id():
     try:
         response = requests.get(f"{Config.URL}/assessment/question", params=request.args,   headers={"Authorization": request.headers.get("Authorization")})
@@ -103,6 +111,7 @@ def get_questions_by_id():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('assessment_detail_teacher')
 def delete_questions_by_id():
     try:
         response = requests.delete(f"{Config.URL}/assessment/question", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
@@ -114,6 +123,7 @@ def delete_questions_by_id():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('assessment_detail_teacher')
 def delete_submission_by_id():
     try:
         response = requests.delete(f"{Config.URL}/assement/submission", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
@@ -126,6 +136,7 @@ def delete_submission_by_id():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('create_assessment')
 def create_assessment():
     data = request.get_json()
     if not data:
@@ -141,6 +152,7 @@ def create_assessment():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('create_assessment')
 def create_questions():
     data = request.get_json()
     if not data:
@@ -157,6 +169,7 @@ def create_questions():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('assignment_detail_teacher')
 def get_assignment_detail_by_id():
     try:
         response = requests.get(f"{Config.URL_CLASS_CONTROL}/teacher/kelas/assignment", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
@@ -168,6 +181,7 @@ def get_assignment_detail_by_id():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('assignment_detail_teacher')
 def get_submission_by_assignment_id():
     try:
         response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas/assignment-submission", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
@@ -179,6 +193,7 @@ def get_submission_by_assignment_id():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('assignment_detail_teacher')
 def get_submission_by_id():
     try:
         response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas/assignment-submission/student", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
@@ -190,6 +205,7 @@ def get_submission_by_id():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('assignment_detail_teacher')
 def delete_submission_by_submission_id():
     try:
         response = requests.delete(f"{Config.URL_CLASS_CONTROL}/kelas/assignment-submission", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
@@ -201,6 +217,7 @@ def delete_submission_by_submission_id():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('assignment_detail_teacher')
 def update_score():
     try:
         response = requests.put(f"{Config.URL_CLASS_CONTROL}/kelas/assignment-submission", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
@@ -212,6 +229,7 @@ def update_score():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('assignment_detail_teacher')
 def get_submission_by_uuid(uuid):
     try:
         response = requests.get(f"{Config.URL_CONTENT}/teacher/student-assignment/{uuid}", headers={"Authorization": request.headers.get("Authorization")})
@@ -230,6 +248,7 @@ def get_submission_by_uuid(uuid):
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('class_student_tab_teacher')
 def get_assessment_by_class_id():
     try:
         response = requests.get(f"{Config.URL}/teacher/assessment/class", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
@@ -241,6 +260,7 @@ def get_assessment_by_class_id():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('class_student_tab_teacher')
 def get_assessment_by_id():
     try:
         response = requests.get(f"{Config.URL}/teacher/assessment", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
@@ -253,6 +273,7 @@ def get_assessment_by_id():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('class_detail')
 def get_class_detail_all_week():
     try:
         response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas/weekly-section/class", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
@@ -266,6 +287,7 @@ def get_class_detail_all_week():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('class_detail')
 def delete_item_pembelajaran_by_uuid():
     try:
         response = requests.delete(f"{Config.URL_CONTENT}/item-pembelajaran", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
@@ -279,6 +301,7 @@ def delete_item_pembelajaran_by_uuid():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('class_detail')
 def create_weekly_section():
     data = request.form.to_dict()
     file = request.files.get('file')
@@ -311,6 +334,7 @@ def create_weekly_section():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('class_detail')
 def update_weekly_section_teacher():
     data = request.form.to_dict()
     file = request.files.get('file')
@@ -338,6 +362,7 @@ def update_weekly_section_teacher():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('class_detail')
 def update_assignment_teacher():
     data = request.form.to_dict()
     file = request.files.get('file')
@@ -366,6 +391,7 @@ def update_assignment_teacher():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('class_detail')
 def create_assignment():
     data = request.form.to_dict()
     file = request.files.get('file')
@@ -403,6 +429,7 @@ def create_assignment():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('class_detail')
 def delete_weekly_section():
     try:
         response = requests.delete(f"{Config.URL_CLASS_CONTROL}/teacher/kelas/weekly-section", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
@@ -415,6 +442,7 @@ def delete_weekly_section():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+# @check_permission('class_detail')
 def delete_assignment_teacher():
     try:
         response = requests.delete(f"{Config.URL_CLASS_CONTROL}/teacher/kelas/assignment", params=request.args, headers={"Authorization": request.headers.get("Authorization")})

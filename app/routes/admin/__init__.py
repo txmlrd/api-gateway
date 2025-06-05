@@ -5,8 +5,9 @@ import requests
 from werkzeug.utils import secure_filename
 from config import Config
 from security.check_device import check_device_token
-from security.check_crucial_token import check_crucial_token
+from security.check_permission import check_permission
 from security.role_required import role_required
+from security.check_crucial_token import check_crucial_token
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -14,6 +15,7 @@ admin_bp = Blueprint('admin', __name__)
 @jwt_required()
 @check_device_token
 @role_required(['admin'])
+# @check_permission('manage_user')
 def get_all_user():
     try:
         response = requests.get(f"{Config.USER_SERVICE_URL}/admin/get-user",params=request.args, headers={"Authorization": f"{request.headers['Authorization']}"})
@@ -27,6 +29,7 @@ def get_all_user():
 @jwt_required()
 @check_device_token
 @role_required(['admin'])
+# @check_permission('manage_user')
 def search_user():
     try:
         response = requests.get(f"{Config.USER_SERVICE_URL}/admin/search-user",params=request.args, headers={"Authorization": f"{request.headers['Authorization']}"})
@@ -40,6 +43,7 @@ def search_user():
 @jwt_required()
 @check_device_token
 @role_required(['admin'])
+# @check_permission('manage_user')
 @check_crucial_token()
 def modify_role():
     data = request.get_json()
@@ -57,6 +61,7 @@ def modify_role():
 @jwt_required()
 @check_device_token
 @role_required(['admin'])
+# @check_permission('manage_user')
 @check_crucial_token()
 def delete_user(uuid):
     try:
@@ -72,6 +77,7 @@ def delete_user(uuid):
 @jwt_required()
 @check_device_token
 @role_required(['admin'])
+# @check_permission('manage_user')
 def inject_crucial_token():
     data = request.get_json()
     if not data:
@@ -88,6 +94,7 @@ def inject_crucial_token():
 @jwt_required()
 @check_device_token
 @role_required(['admin'])
+# @check_permission('manage_user')
 def delete_crucial_token():
     data = request.get_json()
     if not data:
@@ -106,6 +113,7 @@ def delete_crucial_token():
 @jwt_required()
 @check_device_token
 @role_required(['admin'])
+# @check_permission('manage_user')
 def verify_email_user():
     data = request.get_json()
     if not data:
