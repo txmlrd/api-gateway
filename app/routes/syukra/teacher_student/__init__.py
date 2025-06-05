@@ -31,7 +31,7 @@ def get_class():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher', 'student'])
-@check_permission('view_assessment')
+# @check_permission('view_assessment')
 def get_upcoming_assessments():
     try:
         response = requests.get(
@@ -48,7 +48,7 @@ def get_upcoming_assessments():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher', 'student'])
-@check_permission('get_item_pembelajaran')
+# @check_permission('get_item_pembelajaran')
 def get_item_pembelajaran_by_uuid():
     try:
         response = requests.get(f"{Config.URL_CONTENT}/item-pembelajaran", params=request.args, stream=True, headers={"Authorization": request.headers.get("Authorization")})
@@ -66,7 +66,7 @@ def get_item_pembelajaran_by_uuid():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher', 'student'])
-@check_permission('class_teacher_student')
+# @check_permission('class_teacher_student')
 def get_class_members_student():
     try:
         response = requests.get(
@@ -82,7 +82,7 @@ def get_class_members_student():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher', 'student'])
-@check_permission('class_teacher_student')
+# @check_permission('class_teacher_student')
 def get_class_detail_by_id():
     try:
         response = requests.get(f"{Config.URL_CLASS_CONTROL}/kelas", params=request.args, headers={"Authorization": request.headers.get("Authorization")})
