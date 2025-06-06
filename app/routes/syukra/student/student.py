@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import requests
 from werkzeug.utils import secure_filename
 from config import Config
+from security.check_crucial_token import check_crucial_token
 from security.check_device import check_device_token
 from security.role_required import role_required
 from security.check_permission import check_permission
@@ -85,6 +86,7 @@ def get_assessment_by_id_userid():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'student'])
+@check_crucial_token()
 # @check_permission('assessment_detail_student')
 def start_submission():
     data = request.get_json()
@@ -104,8 +106,9 @@ def start_submission():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'student'])
+@check_crucial_token()
 # @check_permission('assessment_detail_student')
-def get_answer_by_submission_id():
+def continue_answer_submission():
     try:
         response = requests.get(
             f"{Config.URL}/answer/submission",

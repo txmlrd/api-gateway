@@ -8,6 +8,7 @@ from security.check_device import check_device_token
 from security.role_required import role_required
 from security.check_permission import check_permission
 from flask import Response
+from security.check_crucial_token import check_crucial_token
 
 syukra_teacher_bp = Blueprint('syukra-teacher', __name__)
 
@@ -217,6 +218,7 @@ def delete_submission_by_submission_id():
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
+@check_crucial_token()
 # @check_permission('assignment_detail_teacher')
 def update_score():
     try:
