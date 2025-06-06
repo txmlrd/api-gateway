@@ -225,14 +225,14 @@ def update_score():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Class Control Service unavailable", "details": str(e)}), 503
       
-@syukra_teacher_bp.route('/teacher/student-assignment/<uuid>', methods=['GET'])
+@syukra_teacher_bp.route('/teacher/student-assignment/', methods=['GET'])
 @jwt_required()
 @check_device_token
 @role_required(['admin', 'teacher'])
 # @check_permission('assignment_detail_teacher')
-def get_submission_by_uuid(uuid):
+def get_submission_by_uuid():
     try:
-        response = requests.get(f"{Config.URL_CONTENT}/teacher/student-assignment/{uuid}", headers={"Authorization": request.headers.get("Authorization")})
+        response = requests.get(f"{Config.URL_CONTENT}/teacher/student-assignment/",params=request.args, headers={"Authorization": request.headers.get("Authorization")})
         return Response(
             response.iter_content(chunk_size=1024),
             content_type=response.headers.get('Content-Type'),
