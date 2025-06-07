@@ -142,3 +142,33 @@ def crucial_verify():
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Auth Service unavailable", "details": str(e)}), 503
+
+@auth_bp.route('/upload-face', methods=['POST'])
+@jwt_required()
+@check_device_token
+def upload_face():
+    data = request.form
+    token = request.headers.get('Authorization').split(' ')[1]
+    files = [('images', file) for file in request.files.getlist('images')]
+    if not files:
+        return jsonify({"error": "No face image provided"}), 400
+    try:
+        response = requests.post(f"{Config.AUTH_SERVICE_URL}/upload-face", headers={"Authorization": f"Bearer {token}"}, files=files, data=data)
+        return jsonify(response.json()), response.status_code
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "Auth Service unavailable", "details": str(e)}), 503
+    
+@auth_bp.route('/check-face-reference/<uuid>', methods=['GET'])
+@jwt_required()
+@check_device_token
+def check_face_reference(uuid):
+    token = request.headers.get('Authorization').split(' ')[1]
+    try:
+        response = requests.get(
+            f"{Config.AUTH_SERVICE_URL}/check-face-reference/{uuid}",
+            headers={"Authorization": f"Bearer {token}"},
+            timeout=10
+        )
+        return jsonify(response.json()), response.status_code
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "Auth Service unavailable", "details": str(e)}), 503
