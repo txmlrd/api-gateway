@@ -135,9 +135,18 @@ def reset_password_request():
     data = request.get_json()
     try:
         response = requests.post(f"{Config.AUTH_SERVICE_URL}/reset-password/request", json=data, timeout=5)
-        return jsonify(response.json()), response.status_code
+        try:
+            return jsonify(response.json()), response.status_code
+        except ValueError:  # JSONDecodeError subclass
+            return jsonify({
+                "error": "Invalid response from Auth Service",
+                "details": response.text
+            }), 502
     except requests.exceptions.RequestException as e:
-        return jsonify({"error": "Auth Service unavailable", "details": str(e)}), 503
+        return jsonify({
+            "error": "Auth Service unavailable",
+            "details": str(e)
+        }), 503
 
 @user_bp.route('/reset-password/confirm/<token>', methods=['GET','POST'])
 def reset_password_proxy(token):
