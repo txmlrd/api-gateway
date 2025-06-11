@@ -134,14 +134,14 @@ def delete_profile(id):
 def reset_password_request():
     data = request.get_json()
     try:
-        response = requests.post(f"{Config.USER_SERVICE_URL}/reset-password/request", json=data, timeout=5)
+        response = requests.post(f"{Config.AUTH_SERVICE_URL}/reset-password/request", json=data, timeout=5)
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
-        return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
+        return jsonify({"error": "Auth Service unavailable", "details": str(e)}), 503
 
 @user_bp.route('/reset-password/confirm/<token>', methods=['GET','POST'])
 def reset_password_proxy(token):
-    auth_service_url = f"{Config.USER_SERVICE_URL}/reset-password/confirm/{token}"
+    auth_service_url = f"{Config.AUTH_SERVICE_URL}/reset-password/confirm/{token}"
 
     try:
         if request.method == 'GET':

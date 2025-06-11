@@ -8,6 +8,7 @@ from security.check_device import check_device_token
 from security.check_permission import check_permission
 from security.role_required import role_required
 from security.check_crucial_token import check_crucial_token
+from urllib.parse import urlencode
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -125,3 +126,27 @@ def verify_email_user():
         return jsonify(response.json()), 400
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
+    
+@admin_bp.route('/log-password', methods=['GET'])
+@jwt_required()
+@check_device_token
+@role_required(['admin'])
+def log_password():
+    try:
+        # Ambil semua query params dari frontend
+        query_string = urlencode(request.args)
+        url = f"{Config.AUTH_SERVICE_URL}/log-password"
+        if query_string:
+            url += f"?{query_string}"
+
+        headers = {"Authorization": request.headers["Authorization"]}
+        response = requests.get(url, headers=headers)
+
+        return jsonify(response.json()), response.status_code
+
+    except requests.exceptions.RequestException as e:
+        return jsonify({
+            "status": "failed",
+            "message": "Auth Service unavailable",
+            "data": str(e)
+        }), 503
