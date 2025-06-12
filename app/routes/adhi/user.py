@@ -53,7 +53,6 @@ def proxy_verify_email(token):
 @jwt_required()
 @check_device_token
 # @check_permission('manage_profile')
-@check_crucial_token()
 def update_profile():
     token = request.headers.get('Authorization').split(' ')[1]
     data = request.get_json()
