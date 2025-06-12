@@ -42,10 +42,25 @@ def register():
 @user_bp.route('/verify-email/<token>', methods=["GET"])
 def proxy_verify_email(token):
     try:
-        response = requests.get(f"{Config.USER_SERVICE_URL}/verify-email/{token}")
-        return jsonify(response.json()), response.status_code
-    except requests.exceptions.RequestException:
-        return jsonify({"msg": "Failed to connect to Auth Service"}), 500
+        # Ambil query param seperti ?redirect_url=...
+        redirect_url = request.args.get("redirect_url")
+        
+        # Bangun URL lengkap ke user-service
+        service_url = f"{Config.USER_SERVICE_URL}/verify-email/{token}"
+        if redirect_url:
+            service_url += f"?redirect_url={redirect_url}"
+
+        # Forward ke user-service
+        resp = requests.get(service_url)
+
+        # Teruskan response apa adanya (HTML, redirect, dll)
+        return Response(
+            resp.content,
+            status=resp.status_code,
+            content_type=resp.headers.get('Content-Type')
+        )
+    except requests.exceptions.RequestException as e:
+        return jsonify({"msg": "Failed to connect to User Service"}), 500
 
 
     
