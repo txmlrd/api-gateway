@@ -10,7 +10,6 @@ def check_permission(permission_name):
         @wraps(f)
         def wrapper(*args, **kwargs):
             jwt_data = get_jwt()
-            logging.debug(f"Claims: {jwt_data}")
             permissions = jwt_data.get("permissions", [])
 
             if permission_name not in permissions:

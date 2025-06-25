@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request
-from extensions import jwt_required
+from app.extensions import jwt_required
 from security.check_device import check_device_token
 import requests
-from config import Config
+from app.config import Config
 
 from flask import Response
 

@@ -16,4 +16,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Default command
 
-CMD ["python","run.py"]
+CMD ["python","app/run.py"]

@@ -18,10 +18,10 @@ class Config:
 
     # JWT Configuration
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
-    JWT_ACCESS_TOKEN_EXPIRES = int(os.environ.get('JWT_ACCESS_TOKEN_EXPIRES', 3600))  # 1 hour
-    JWT_REFRESH_TOKEN_EXPIRES = int(os.environ.get('JWT_REFRESH_TOKEN_EXPIRES', 86400))  # 24 hours
+    JWT_ACCESS_TOKEN_EXPIRES = int(os.environ.get('JWT_ACCESS_TOKEN_EXPIRES'))  
+    JWT_REFRESH_TOKEN_EXPIRES = int(os.environ.get('JWT_REFRESH_TOKEN_EXPIRES'))  
 
     # JWT Header settings
-    JWT_TOKEN_LOCATION = ['headers']  # Harus list, bukan string
+    JWT_TOKEN_LOCATION = ['headers'] 
     JWT_HEADER_NAME = 'Authorization'
     JWT_HEADER_TYPE = 'Bearer'

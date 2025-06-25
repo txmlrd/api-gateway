@@ -1,8 +1,8 @@
 from flask import Blueprint, session, jsonify, request
-from extensions import jwt_required, get_jwt_identity
+from app.extensions import jwt_required, get_jwt_identity
 from security.check_device import check_device_token
 import requests
-from config import Config
+from app.config import Config
 from security.check_permission import check_permission
 from security.role_required import role_required
 from werkzeug.utils import secure_filename

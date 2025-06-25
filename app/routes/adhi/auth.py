@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 import requests
-from config import Config
-from extensions import jwt_required, get_jwt_identity, decode_token, redis_client, get_jwt
+from app.config import Config
+from app.extensions import jwt_required, get_jwt_identity, decode_token, redis_client, get_jwt
 from security.check_device import check_device_token
 
 auth_bp = Blueprint('api_gateway', __name__)
@@ -58,7 +58,7 @@ def login_face():
             try:
                 decoded = decode_token(access_token)
                 jti = decoded['jti']
-                user_id = decoded['sub']  # identity=user.id
+                user_id = decoded['sub']
                 redis_client.setex(f"user_active_token:{user_id}", 3600, jti)
             except Exception as e:
                 return jsonify({"error": "Token decoding failed", "details": str(e)}), 500
@@ -85,8 +85,7 @@ def login():
     try:
         response = requests.post(
             f"{Config.AUTH_SERVICE_URL}/login",
-            json=data,
-            timeout=5
+            json=data
         )
     except Exception as e:
         return jsonify({"error": "Auth service unreachable", "details": str(e)}), 500
@@ -98,7 +97,7 @@ def login():
         try:
             decoded = decode_token(access_token)
             jti = decoded['jti']
-            user_id = decoded['sub']  # karena identity=user.id
+            user_id = decoded['sub'] 
             redis_client.setex(f"user_active_token:{user_id}", 3600, jti)
         except Exception as e:
             return jsonify({"error": "Token decoding failed", "details": str(e)}), 500

@@ -1,8 +1,8 @@
 from flask import Blueprint, session, jsonify, request
-from extensions import jwt_required, get_jwt_identity
+from app.extensions import jwt_required, get_jwt_identity
 from security.check_device import check_device_token
 import requests
-from config import Config
+from app.config import Config
 from security.check_permission import check_permission
 from security.check_crucial_token import check_crucial_token
 from werkzeug.utils import secure_filename
@@ -205,4 +205,4 @@ def update_profile_picture():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
 
-    
+

@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify, url_for, render_template
-from extensions import  jwt_required
+from app.extensions import  jwt_required
 from datetime import datetime, timedelta
 import requests
 from werkzeug.utils import secure_filename
-from config import Config
+from app.config import Config
 from security.check_device import check_device_token
 from security.check_permission import check_permission
 from security.role_required import role_required
