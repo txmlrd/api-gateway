@@ -113,7 +113,11 @@ def update_email():
 def confirm_email_update(token):
     try:
         response = requests.get(f"{Config.USER_SERVICE_URL}/update/email/confirm/{token}")
-        return jsonify(response.json()), response.status_code
+        return Response(
+            response.content,
+            status=response.status_code,
+            content_type=response.headers.get('Content-Type')
+        )
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "User Service unavailable", "details": str(e)}), 503
 
